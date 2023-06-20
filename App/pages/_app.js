@@ -25,7 +25,7 @@ function MyApp({ Component, pageProps }) {
     <>
     {/* changess */}
       <Meta title="Home 1" />
-
+{/* <Component></Component> */}
       <Provider store={store}>
         <ThemeProvider enableSystem={true} attribute="class">
           <MetaMaskProvider>
