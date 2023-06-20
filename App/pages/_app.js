@@ -23,6 +23,7 @@ function MyApp({ Component, pageProps }) {
 
   return (
     <>
+    {/* changess */}
       <Meta title="Home 1" />
 
       <Provider store={store}>
