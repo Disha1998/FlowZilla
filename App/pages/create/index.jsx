@@ -30,7 +30,7 @@ const Create = () => {
     getAllNfts,
     user,
   } = superCoolContext;
-  const [title, setTitle] = useState("");
+  const [title, setTitle] = useState("default");
   const [category, setCategory] = useState("Profile avatar" || category);
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState();
@@ -155,7 +155,7 @@ const Create = () => {
         .send([
           fcl.transaction(mintNFTFLow),
           fcl.args([
-            fcl.arg(hash, t.String),
+            fcl.arg(ipfsHash, t.String),
             fcl.arg(name, t.String),
           ]),
           fcl.payer(fcl.authz),
@@ -164,11 +164,10 @@ const Create = () => {
           fcl.limit(9999),
         ])  
         .then(fcl.decode);
-
-        
-
-      console.log(transactionId);
+      console.log(transactionId, "<=transactionId");
+      setMintLoading(false);
       return fcl.tx(transactionId).onceSealed();
+
     } catch (error) {
       console.log("Error: ", error);
     setMintLoading(false);
@@ -206,8 +205,10 @@ const Create = () => {
     console.log(nftData);
     setMintLoading(true);
     let metadataurl = await uploadOnIpfs(nftData);
-    await setupUser();
-   await mintNft(ethers.utils.parseUnits(price?.toString(), "ether"), metadataurl);
+    // await setupUser();
+    console.log('metadataurl', metadataurl);
+    mintNft(ethers.utils.parseUnits(nftData.price?.toString(), "ether"), metadataurl);
+
   };
 
   function handleSelectedImg(url) {

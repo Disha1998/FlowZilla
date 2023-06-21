@@ -1,5 +1,6 @@
 {
   "dependencies": {
-    "@onflow/fcl": "^1.4.1"
+    "@onflow/fcl": "^1.4.1",
+    "@onflow/types": "^1.1.0"
   }
 }

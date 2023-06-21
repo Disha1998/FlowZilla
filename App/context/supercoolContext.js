@@ -39,6 +39,7 @@ export const SupercoolAuthContextProvider = (props) => {
   useEffect(() => {
     fcl.currentUser().subscribe(setUser);
   }, []);
+  // console.log(user.addr,'user');
 
   const login = async () => {
     if (!window.ethereum) return;
