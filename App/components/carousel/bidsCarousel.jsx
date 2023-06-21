@@ -12,19 +12,54 @@ import { MdKeyboardArrowRight, MdKeyboardArrowLeft } from "react-icons/md";
 import { bidsModalShow } from "../../redux/counterSlice";
 import { useDispatch } from "react-redux";
 import Likes from "../likes";
-import React from "react";
+import * as fcl from "@onflow/fcl";
+import * as t from "@onflow/types";
+import { getNFTsScript } from "../../../flow/cadence/scripts/get_nfts";
+import React, { useState, useContext, useEffect } from "react";
 
 const BidsCarousel = () => {
   const superCoolContext = React.useContext(SupercoolAuthContext);
-  const { allNfts } = superCoolContext;
-  const dispatch = useDispatch();
-  console.log(allNfts);
+  const [nfts, setNFTs] = useState([]);
 
-  const handleclick = () => {
-    console.log("clicked on ");
-  };
+  const { user } = superCoolContext;
+  useEffect(() => {
+    if (user?.addr !== undefined) {
+      getUserNFTs();
+
+    }
+  }, [user?.addr])
+
+  const getUserNFTs = async () => {
+    let account = user?.addr
+    // console.log('address',account);
+    const result = await fcl.send([
+      fcl.script(getNFTsScript),
+      fcl.args([
+        fcl.arg(account, t.Address)
+      ])
+    ]).then(fcl.decode);
+
+    console.log('result==>', result);
+    let metadataa = []
+    for (let i = 0; i < result.length; i++) {
+      const tokenURI = result[i].ipfsHash;
+
+      const response = await fetch(tokenURI);
+      const metadata = await response.json();
+      console.log('metadata--', metadata);
+      metadataa.push(metadata)
+    }
+
+    setNFTs(metadataa);
+  }
+
+  console.log('nfts,,,', nfts);
+
+
+
   return (
     <>
+      <h1>slider.....</h1>
       <Swiper
         modules={[Navigation, Pagination, Scrollbar]}
         spaceBetween={30}
@@ -50,7 +85,7 @@ const BidsCarousel = () => {
         }}
         className=" card-slider-4-columns !py-5"
       >
-        {allNfts && allNfts.map((item) => {
+        {nfts && nfts.map((item) => {
           // console.log(item, 'item');
 
           return (

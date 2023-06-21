@@ -167,6 +167,7 @@ const Create = () => {
         .then(fcl.decode);
       console.log(transactionId, "<=transactionId");
       setMintLoading(false);
+      // alert - nft minted successfully!!
       return fcl.tx(transactionId).onceSealed();
 
     } catch (error) {

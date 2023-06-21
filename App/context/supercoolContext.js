@@ -40,43 +40,7 @@ export const SupercoolAuthContextProvider = (props) => {
   }, []);
   // console.log(user.addr,'user');
 
-  const login = async () => {
-    if (!window.ethereum) return;
-    try {
-      const accounts = await window.ethereum.request({
-        method: "eth_requestAccounts",
-      });
-      setUserAdd(accounts[0]);
-      localforage.setItem("address", accounts[0]);
-      if (window.ethereum.networkVersion === "80001") {
-        setWalletConnected(true);
-      } else {
-        await window.ethereum.request({
-          method: "wallet_switchEthereumChain",
-          params: [{ chainId: "0x13881" }], // Polygon Mumbai chain ID
-        });
-        setWalletConnected(true);
-      }
 
-      if (ethereum && ethereum.selectedAddress) {
-        const address = await signer.getAddress();
-      } else {
-        console.log("No wallet connected or logged out");
-      }
-      getAllNfts(accounts[0]);
-    } catch (error) {
-      console.error("Login error:", error);
-    }
-    getAllNfts(accounts[0]);
-  };
-  const logout = async () => {
-    localforage.removeItem("address");
-    setWalletConnected(false);
-    localforage.getItem("address").then((value) => {
-      console.log(value);
-    });
-  };
-  console.log(userAdd);
 
   const auth =
     "Basic " +
@@ -185,8 +149,7 @@ export const SupercoolAuthContextProvider = (props) => {
   return (
     <SupercoolAuthContext.Provider
       value={{
-        login,
-        logout,
+      
         uploadOnIpfs,
         allNfts,
         handleImgUpload,
