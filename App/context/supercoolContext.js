@@ -26,7 +26,6 @@ export const SupercoolAuthContextProvider = (props) => {
   const [user, setUser] = useState();
   // const [provider, setProvider] = useState(null);
   // const [signer, setSigner] = useState(null);
-
   let provider;
   let signer;
   if (typeof window !== "undefined" && window.ethereum) {
