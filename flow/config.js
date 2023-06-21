@@ -10,5 +10,5 @@ fcl
   )
   .put("accessNode.api", "https://access-testnet.onflow.org")
   .put("discovery.wallet", "https://fcl-discovery.onflow.org/testnet/authn")
-  .put("0xDeployer", process.env.deployerAddress)
-  .put("0xStandard", process.env.standardAddress);
+  .put("0xDeployer", process.env.supercoolAddress)
+  .put("0xStandard", process.env.nonFungibleAddress);

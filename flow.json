@@ -34,8 +34,8 @@
   },
   "accounts": {
     "emulator-account": {
-      "address": "f8d6e0586b0a20c7",
-      "key": "cdb3410ae829f5e2a29f71f53efbce66bde1187948d6317de6918d5003576ca7"
+      "address": "0xd81f6bc1413b31ce",
+      "key": "d4aa3ee06587d5be831c0f563f7c9fb6da9758429d899985321cc45d78b12f57"
     },
     "testnet-account": {
       "address": "0x71bbd2f430c9b437",

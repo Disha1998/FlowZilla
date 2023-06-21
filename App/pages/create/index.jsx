@@ -13,6 +13,8 @@ import ImageModal from "../modal/modal";
 import RendersellNft from "../renderSellNft/renderSellNft";
 import { mintNFTFLow } from "../../../flow/cadence/transactions/mint_nft";
 import { setupUserTx } from "../../../flow/cadence/transactions/setup_user";
+import * as fcl from "@onflow/fcl";
+import * as t from "@onflow/types"
 
 const Create = () => {
   const superCoolContext = React.useContext(SupercoolAuthContext);
@@ -67,7 +69,8 @@ const Create = () => {
   const client = new NFTStorage({ token: NFT_STORAGE_TOKEN });
 
   const setupUser = async () => {
-    const transactionId = await fcl
+    
+        const transactionId = await fcl
       .send([
         fcl.transaction(setupUserTx),
         fcl.args([]),
@@ -134,7 +137,7 @@ const Create = () => {
         arry.push(rep);
       }
       console.log(arry, "----arry");
-      setupUser();
+     
       setImages(arry);
       setGenerateLoading(false);
     } catch (error) {
@@ -145,25 +148,31 @@ const Create = () => {
   // JD CORS Solution END -------------------
 
   const mintNft = async (_price, _metadataurl) => {
+    const hash = _metadataurl;
+    const name = title;
     try {
       const transactionId = await fcl
         .send([
           fcl.transaction(mintNFTFLow),
           fcl.args([
-            fcl.arg(_metadataurl, t.String),
-            fcl.arg(nameOfNFT, title),
+            fcl.arg(hash, t.String),
+            fcl.arg(name, t.String),
           ]),
           fcl.payer(fcl.authz),
           fcl.proposer(fcl.authz),
           fcl.authorizations([fcl.authz]),
           fcl.limit(9999),
-        ])
+        ])  
         .then(fcl.decode);
+
+        
 
       console.log(transactionId);
       return fcl.tx(transactionId).onceSealed();
     } catch (error) {
-      console.log("Error uploading file: ", error);
+      console.log("Error: ", error);
+    setMintLoading(false);
+
     }
     user && (await getAllNfts(user.addr));
     setLoading(!loading);
@@ -197,7 +206,8 @@ const Create = () => {
     console.log(nftData);
     setMintLoading(true);
     let metadataurl = await uploadOnIpfs(nftData);
-    mintNft(ethers.utils.parseUnits(price?.toString(), "ether"), metadataurl);
+    await setupUser();
+   await mintNft(ethers.utils.parseUnits(price?.toString(), "ether"), metadataurl);
   };
 
   function handleSelectedImg(url) {

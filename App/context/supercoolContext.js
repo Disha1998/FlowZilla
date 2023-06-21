@@ -81,7 +81,8 @@ export const SupercoolAuthContextProvider = (props) => {
   const auth =
     "Basic " +
     Buffer.from(
-      process.env.infuraProjectKey + ":" + process.env.infuraSecretKey
+      // process.env.infuraProjectKey + ":" + process.env.infuraSecretKey
+      "2DQRq820rLbznhFlkIbTkuYAyCS" + ":" + "33d97cf6366f9565421e36ff7e018e60"
     ).toString("base64");
 
   const client = create({
