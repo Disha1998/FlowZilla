@@ -198,7 +198,7 @@ const Create = () => {
     price: price,
     chain: chain,
     image:
-      "https://bafkreif4urrcdypupvez7ombtizi2asquarxhm3tojckbl35if5zzdqbpi.ipfs.nftstorage.link/",
+      "https://bafkreia4siyqdzdskc4p7anx3uhpce3kqc5tt26xa7w63mjzdr3fop6ohe.ipfs.nftstorage.link/",
     category: category,
   };
   const createNft = async () => {
