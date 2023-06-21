@@ -1,4 +1,4 @@
-export const mintNFT = `
+export const mintNFTFLow = `
 import SuperCool from 0x71bbd2f430c9b437
 
 transaction(ipfsHash: String, name: String) {
