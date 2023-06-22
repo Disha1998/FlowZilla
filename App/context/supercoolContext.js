@@ -209,6 +209,7 @@ export const SupercoolAuthContextProvider = (props) => {
         user,
         uploadDatainIpfs,
         // getAllNfts,
+        getUserNFTs,
         getProfileData,
         generateText,
       }}

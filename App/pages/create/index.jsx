@@ -29,7 +29,7 @@ const Create = () => {
     prompt,
     setPrompt,
     genRanImgLoding,
-    getAllNfts,
+    getUserNFTs,
     user,
   } = superCoolContext;
   const [title, setTitle] = useState("default");
@@ -173,7 +173,7 @@ const Create = () => {
     } catch (error) {
       console.log("Error uploading file: ", error);
     }
-    user && (await getAllNfts(user.addr));
+    user && (await getUserNFTs());
     setLoading(!loading);
     setMintLoading(false);
     setImages([]);
@@ -207,7 +207,7 @@ const Create = () => {
     let metadataurl = await uploadOnIpfs(nftData);
     // await setupUser();
     console.log('metadataurl', metadataurl);
-    mintNft(ethers.utils.parseUnits(nftData.price?.toString(), "ether"), metadataurl);
+    mintNft(ethers.utils.parseUnits(price?.toString(), "ether"), metadataurl);
 
   };
 
