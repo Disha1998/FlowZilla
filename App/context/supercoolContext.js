@@ -10,6 +10,8 @@ import axios from "axios";
 import * as fcl from "@onflow/fcl";
 import { getNFTs, getNFTsScript } from "../../flow/cadence/scripts/get_nfts";
 import * as types from "@onflow/types";
+import * as t from "@onflow/types";
+import { getSaleNFTsScript } from "../../flow/cadence/scripts/get_sale_nfts";
 
 export const SupercoolAuthContext = createContext(undefined);
 
@@ -24,6 +26,9 @@ export const SupercoolAuthContextProvider = (props) => {
   const [userAdd, setUserAdd] = useState();
   const [genRanImgLoding, setGenRanImgLoding] = useState(false);
   const [user, setUser] = useState();
+  const [nfts, setNFTs] = useState([]);
+  const [nftsForSell, setNFTsForSell] = useState([]);
+
   // const [provider, setProvider] = useState(null);
   // const [signer, setSigner] = useState(null);
   let provider;
@@ -83,21 +88,60 @@ export const SupercoolAuthContextProvider = (props) => {
     }
   };
 
-  const getAllNfts = async (add) => {
-    const result = await fcl
-      .send([fcl.script(getNFTsScript), fcl.arg([fcl.arg(add, types.Address)])])
-      .then(fcl.decode);
-    console.log(result);
-    setAllNfts(result);
-    setLoading(!loading);
-  };
+  useEffect(() => {
+    if (user?.addr !== undefined) {
+      getUserNFTs();
+      getUserSaleNFTs();
+    }
+  }, [user?.addr])
 
-  useState(() => {
-    setTimeout(() => {
-      console.log("running usestate");
-      user && getAllNfts(user.addr);
-    }, 5000);
-  }, [loading]);
+  const getUserNFTs = async () => {
+    let account = user?.addr
+    const result = await fcl.send([
+      fcl.script(getNFTsScript),
+      fcl.args([
+        fcl.arg(account, t.Address)
+      ])
+    ]).then(fcl.decode);
+
+    let metadataa = []
+    for (let i = 0; i < result.length; i++) {
+      const tokenURI = result[i].ipfsHash;
+      const tokenid = result[i].id;
+      const response = await fetch(tokenURI);
+      const metadata = await response.json();
+      const newMetadata = {...metadata, id : tokenid}
+      metadataa.push(newMetadata)
+    }
+    setAllNfts(metadataa);
+  }
+
+
+  const getUserSaleNFTs = async () => {
+    let account = user?.addr
+    const result = await fcl.send([
+      fcl.script(getSaleNFTsScript),
+      fcl.args([
+        fcl.arg(account, t.Address)
+      ])
+    ]).then(fcl.decode);
+
+    console.log(result);
+
+
+    let metadataa = [];
+    const values = Object.values(result);
+    for (let i = 0; i < values.length; i++) {
+      const sellnfts = values[i];
+      const tokenURI = sellnfts.nftRef.ipfsHash;
+      const tokenid = sellnfts.nftRef.id;
+      const response = await fetch(tokenURI);
+      const metadata = await response.json();
+      const newMetadata = { ...metadata, id: tokenid };
+      metadataa.push(newMetadata);
+    }
+    setNFTsForSell(metadataa);
+  }
   const uploadOnIpfs = async (e) => {
     let dataStringify = JSON.stringify(e);
     const ipfsResult = await client.add(dataStringify);
@@ -149,7 +193,7 @@ export const SupercoolAuthContextProvider = (props) => {
   return (
     <SupercoolAuthContext.Provider
       value={{
-      
+        nftsForSell,
         uploadOnIpfs,
         allNfts,
         handleImgUpload,
@@ -164,7 +208,7 @@ export const SupercoolAuthContextProvider = (props) => {
         userAdd,
         user,
         uploadDatainIpfs,
-        getAllNfts,
+        // getAllNfts,
         getProfileData,
         generateText,
       }}

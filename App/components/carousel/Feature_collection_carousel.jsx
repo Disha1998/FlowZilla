@@ -10,7 +10,6 @@ import Link from "next/link";
 import { SupercoolAuthContext } from "../../context/supercoolContext";
 const Feature_collections_carousel = () => {
   const superCoolContext = React.useContext(SupercoolAuthContext);
-  const { allNfts } = superCoolContext;
   return (
     <>
       <Swiper
@@ -67,7 +66,6 @@ const Feature_collections_carousel = () => {
               <article>
                 <div className="dark:bg-jacarta-700 dark:border-jacarta-700 border-jacarta-100 rounded-2xl border bg-white p-[1.1875rem] transition-shadow hover:shadow-lg">
                   <Link 
-                  // href={`/item/item_${allNfts.tokenId}`}
                   >
                     <a className="flex space-x-[0.625rem]">
                       <figure className="w-[74.5%] h-full">
