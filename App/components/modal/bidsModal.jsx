@@ -5,24 +5,39 @@ import { SupercoolAuthContext } from "../../context/supercoolContext";
 import { useRouter } from 'next/router';
 import { ethers } from "ethers";
 import { CircularProgress } from "@mui/material";
+import { purchaseTx } from "../../../flow/cadence/transactions/purchase";
+import * as t from "@onflow/types";
+import * as fcl from "@onflow/fcl";
+
 
 const BidsModal = () => {
   const { bidsModal } = useSelector((state) => state.counter);
   const dispatch = useDispatch();
   const superCoolContext = React.useContext(SupercoolAuthContext);
-  const { allNfts, contract } = superCoolContext;
+  const { allNfts, contract, user } = superCoolContext;
   const [buyLoading, setBuyLoading] = useState(false);
 
-  const purchaseNft = async (_tokenId, _price) => {
+  const purchaseNft = async (id, _price) => {
+    console.log('_tokenId', id);
     setBuyLoading(true);
-    try {
-      const tx = await contract.buyToken(_tokenId, { value: ethers.utils.parseUnits(_price.toString(), "ether") });
-      await tx.wait();
+    let account = user.addr;
+    const transactionId = await fcl.send([
+      fcl.transaction(purchaseTx),
+      fcl.args([
+        fcl.arg(account, t.Address),
+        fcl.arg(parseInt(id), t.UInt64)
+      ]),
+      fcl.payer(fcl.authz),
+      fcl.proposer(fcl.authz),
+      fcl.authorizations([fcl.authz]),
+      fcl.limit(9999)
+    ]).then(fcl.decode);
 
-    } catch (error) {
-      console.error(error);
-    }
+    console.log(transactionId);
     setBuyLoading(false);
+
+    return fcl.tx(transactionId).onceSealed();
+
   }
 
   const router = useRouter();
@@ -98,18 +113,18 @@ const BidsModal = () => {
 
                     <div className="modal-footer">
                       <div className="flex items-center justify-center space-x-4">
-                      {
-                        buyLoading ? 
-                        <CircularProgress />
-                        :
-                        <button
-                          onClick={() => purchaseNft(item.tokenId, item.price)}
-                          type="button"
-                          className="text-accent shadow-white-volume hover:bg-accent-dark hover:shadow-accent-volume w-36 rounded-full bg-white py-3 px-8 text-center font-semibold transition-all hover:text-white"
-                        >
-                          Purchase
-                        </button>
-                      }
+                        {
+                          buyLoading ?
+                            <CircularProgress />
+                            :
+                            <button
+                              onClick={() => purchaseNft(item.id, item.price)}
+                              type="button"
+                              className="text-accent shadow-white-volume hover:bg-accent-dark hover:shadow-accent-volume w-36 rounded-full bg-white py-3 px-8 text-center font-semibold transition-all hover:text-white"
+                            >
+                              Purchase
+                            </button>
+                        }
                       </div>
                     </div>
                   </div>

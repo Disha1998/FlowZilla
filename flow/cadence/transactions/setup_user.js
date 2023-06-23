@@ -1,14 +1,17 @@
 export const setupUserTx = `
-import SuperCool from 0x71bbd2f430c9b437
+import SuperCool from 0x659c3f9aa8deed5b
 import NonFungibleToken from 0x631e88ae7f1d7c20
 import FungibleToken from 0x9a0766d93b6608b7
 import FlowToken from 0x7e60df042a9c0868
-import NFTMarketplace from 0x71bbd2f430c9b437
+import NFTMarketplace from 0x659c3f9aa8deed5b
 
 transaction {
 
   prepare(acct: AuthAccount) {
-    acct.save(<- SuperCool.createEmptyCollection(), to: /storage/SuperCoolCollection)
+    let hasSuperCoolCollection = acct.borrow<&SuperCool.Collection>(from: /storage/SuperCoolCollection) != nil
+    if (!hasSuperCoolCollection) {
+      acct.save(<- SuperCool.createEmptyCollection(), to: /storage/SuperCoolCollection)
+    }
     acct.link<&SuperCool.Collection{SuperCool.CollectionPublic, NonFungibleToken.CollectionPublic}>(/public/SuperCoolCollection, target: /storage/SuperCoolCollection)
     acct.link<&SuperCool.Collection>(/private/SuperCoolCollection, target: /storage/SuperCoolCollection)
     

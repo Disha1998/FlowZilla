@@ -38,19 +38,19 @@
       "key": "cdb3410ae829f5e2a29f71f53efbce66bde1187948d6317de6918d5003576ca7"
     },
     "testnet-account": {
-      "address": "0x71bbd2f430c9b437",
+      "address": "0x659c3f9aa8deed5b",
       "key": {
         "type": "hex",
         "index": 0,
         "signatureAlgorithm": "ECDSA_P256",
         "hashAlgorithm": "SHA3_256",
-        "privateKey": "2bebfbf3edd0867b5d954bca0bceee8719b3a259c4d196fb756b7826560d28d2"
+        "privateKey": "6fb1c6a27f13c5f9993eead4f57dad65e598d93e9f46c469bed802ab84535141"
       }
     }
   },
   "deployments": {
     "testnet": {
-      "testnet-account": ["SuperCool", "NFTMarketplace"]
+      "testnet-account": ["SuperCool","NFTMarketplace"]
     }
   }
 }

@@ -205,7 +205,7 @@ const Create = () => {
     console.log(nftData);
     setMintLoading(true);
     let metadataurl = await uploadOnIpfs(nftData);
-    // await setupUser();
+    await setupUser();
     console.log('metadataurl', metadataurl);
     mintNft(ethers.utils.parseUnits(price?.toString(), "ether"), metadataurl);
 
