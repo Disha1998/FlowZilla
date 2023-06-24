@@ -1,5 +1,5 @@
 export const listForSaleTx = `
-import NFTMarketplace from 0x659c3f9aa8deed5b
+import NFTMarketplace from 0xf7d3f70bbca64a11
 
 transaction(id: UInt64, price: UFix64) {
 

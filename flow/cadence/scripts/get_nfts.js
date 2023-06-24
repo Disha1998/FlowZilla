@@ -1,5 +1,9 @@
 export const getNFTsScript = `
+<<<<<<< HEAD
 import SuperCool from 0x659c3f9aa8deed5b
+=======
+import SuperCool from 0xf7d3f70bbca64a11
+>>>>>>> dhruv
 import NonFungibleToken from 0x631e88ae7f1d7c20
 
 pub fun main(account: Address): [&SuperCool.NFT] {

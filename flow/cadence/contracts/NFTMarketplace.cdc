@@ -1,6 +1,6 @@
 // NOTE: I deployed this to 0x05 in the playground
 import NonFungibleToken from 0x631e88ae7f1d7c20 //Document
-import SuperCool from 0x659c3f9aa8deed5b // First deployed this
+import SuperCool from 0xf7d3f70bbca64a11 // First deployed this
 import FungibleToken from 0x9a0766d93b6608b7 //Document
 import FlowToken from  0x7e60df042a9c0868 //Document
 

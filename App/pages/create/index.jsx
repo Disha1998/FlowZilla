@@ -14,9 +14,7 @@ import RendersellNft from "../renderSellNft/renderSellNft";
 import { mintNFTFLow } from "../../../flow/cadence/transactions/mint_nft";
 import { setupUserTx } from "../../../flow/cadence/transactions/setup_user";
 import * as fcl from "@onflow/fcl";
-import * as t from "@onflow/types";
-
-
+import * as t from "@onflow/types"
 
 const Create = () => {
   const superCoolContext = React.useContext(SupercoolAuthContext);
@@ -31,6 +29,7 @@ const Create = () => {
     genRanImgLoding,
     getUserNFTs,
     user,
+    storeNftOnFirebase
   } = superCoolContext;
   const [title, setTitle] = useState("default");
   const [category, setCategory] = useState("Profile avatar" || category);
@@ -71,7 +70,8 @@ const Create = () => {
   const client = new NFTStorage({ token: NFT_STORAGE_TOKEN });
 
   const setupUser = async () => {
-    const transactionId = await fcl
+    
+        const transactionId = await fcl
       .send([
         fcl.transaction(setupUserTx),
         fcl.args([]),
@@ -138,7 +138,7 @@ const Create = () => {
         arry.push(rep);
       }
       console.log(arry, "----arry");
-      setupUser();
+     
       setImages(arry);
       setGenerateLoading(false);
     } catch (error) {
@@ -149,8 +149,8 @@ const Create = () => {
   // JD CORS Solution END -------------------
 
   const mintNft = async (_price, _metadataurl) => {
-    let ipfsHash = _metadataurl;
-    let name = title;
+    const hash = _metadataurl;
+    const name = title;
     try {
       const transactionId = await fcl
         .send([
@@ -163,7 +163,7 @@ const Create = () => {
           fcl.proposer(fcl.authz),
           fcl.authorizations([fcl.authz]),
           fcl.limit(9999),
-        ])
+        ])  
         .then(fcl.decode);
       console.log(transactionId, "<=transactionId");
       setMintLoading(false);
@@ -171,7 +171,9 @@ const Create = () => {
       return fcl.tx(transactionId).onceSealed();
 
     } catch (error) {
-      console.log("Error uploading file: ", error);
+      console.log("Error: ", error);
+    setMintLoading(false);
+
     }
     user && (await getUserNFTs());
     setLoading(!loading);
@@ -190,22 +192,25 @@ const Create = () => {
     signer = provider.getSigner();
   }
 
-  const contract = new ethers.Contract(SUPER_COOL_NFT_CONTRACT, abi, signer);
 
   const nftData = {
     title: title,
     description: description,
     price: price,
     chain: chain,
+    owner: user?.addr,
     image:
       "https://bafkreia4siyqdzdskc4p7anx3uhpce3kqc5tt26xa7w63mjzdr3fop6ohe.ipfs.nftstorage.link/",
     category: category,
   };
   const createNft = async () => {
-    console.log(nftData);
+    // console.log(nftData);
     setMintLoading(true);
     let metadataurl = await uploadOnIpfs(nftData);
     await setupUser();
+    // await setupUser();
+    await storeNftOnFirebase(metadataurl);
+    
     console.log('metadataurl', metadataurl);
     mintNft(ethers.utils.parseUnits(price?.toString(), "ether"), metadataurl);
 

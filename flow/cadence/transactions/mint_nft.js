@@ -1,5 +1,5 @@
 export const mintNFTFLow = `
-import SuperCool from 0x659c3f9aa8deed5b
+import SuperCool from 0xf7d3f70bbca64a11
 
 transaction(ipfsHash: String, name: String) {
 
