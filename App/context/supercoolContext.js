@@ -42,7 +42,6 @@ export const SupercoolAuthContextProvider = (props) => {
   }, []);
   // console.log(user.addr,'user');
 
-  console.log(process.env.apiKey, '======');
 
   const auth =
     "Basic " +
