@@ -1,6 +1,7 @@
 {
   "dependencies": {
     "@onflow/fcl": "^1.4.1",
-    "@onflow/types": "^1.1.0"
+    "@onflow/types": "^1.1.0",
+    "encoding": "^0.1.13"
   }
 }

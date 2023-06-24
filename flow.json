@@ -7,7 +7,7 @@
   },
   "contracts": {
     "FlowToken": {
-      "source": "./flow/cadence/contracts/FlowToken.cdx",
+      "source": "./flow/cadence/contracts/FlowToken.cdc",
       "aliases": {
         "testnet": "0x7e60df042a9c0868"
       }
@@ -38,19 +38,19 @@
       "key": "cdb3410ae829f5e2a29f71f53efbce66bde1187948d6317de6918d5003576ca7"
     },
     "testnet-account": {
-      "address": "0x71bbd2f430c9b437",
+      "address": "0xf7d3f70bbca64a11",
       "key": {
         "type": "hex",
         "index": 0,
         "signatureAlgorithm": "ECDSA_P256",
         "hashAlgorithm": "SHA3_256",
-        "privateKey": "2bebfbf3edd0867b5d954bca0bceee8719b3a259c4d196fb756b7826560d28d2"
-      }
+        "privateKey": "ee899ba95197c2ac0a21bb8172206539a3f391e91a0506f6165084e4120a349f"
+      }                 
     }
   },
   "deployments": {
     "testnet": {
-      "testnet-account": ["SuperCool", "NFTMarketplace"]
+      "testnet-account": ["SuperCool","NFTMarketplace"]
     }
   }
 }

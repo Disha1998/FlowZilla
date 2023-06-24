@@ -31,6 +31,7 @@ const Create = () => {
     genRanImgLoding,
     getUserNFTs,
     user,
+    storeNftOnFirebase
   } = superCoolContext;
   const [title, setTitle] = useState("default");
   const [category, setCategory] = useState("Profile avatar" || category);
@@ -190,22 +191,24 @@ const Create = () => {
     signer = provider.getSigner();
   }
 
-  const contract = new ethers.Contract(SUPER_COOL_NFT_CONTRACT, abi, signer);
 
   const nftData = {
     title: title,
     description: description,
     price: price,
     chain: chain,
+    owner: user?.addr,
     image:
       "https://bafkreia4siyqdzdskc4p7anx3uhpce3kqc5tt26xa7w63mjzdr3fop6ohe.ipfs.nftstorage.link/",
     category: category,
   };
   const createNft = async () => {
-    console.log(nftData);
+    // console.log(nftData);
     setMintLoading(true);
     let metadataurl = await uploadOnIpfs(nftData);
     // await setupUser();
+    await storeNftOnFirebase(metadataurl);
+    
     console.log('metadataurl', metadataurl);
     mintNft(ethers.utils.parseUnits(price?.toString(), "ether"), metadataurl);
 
