@@ -29,54 +29,12 @@ const User = () => {
   const superCoolContext = React.useContext(SupercoolAuthContext);
   const { allNfts, getProfileData } = superCoolContext;
 
-  localforage.getItem('address').then((value) => {
-    setWalletAddress(value)
-  })
-
-  useEffect(() => {
-    ProfileData();
-    if (allNfts.length > 0) {
-      localforage.getItem('address').then(async (value) => {
-        setAddress(value);
-        getUserData(value);
-      }
-      )
-    }
-  }, [])
-  const ProfileData = async () => {
-
-    localforage.getItem('address').then(async (value) => {
-      setWalletAddress(value)
-
-      const response = await getProfileData(value);
-      console.log('response--', response);
-      setUsername(response.data.username)
-      setBio(response.data.bio)
-      setCoverePhoto(response.data.coverimage);
-      setProfilePhoto(response.data.profilephoto)
-    })
-
-  }
-
-  const getUserData = async (address) => {
-    const dataa = [];
-    for (let i = 0; i < allNfts.length; i++) {
-      const element = allNfts[i];
-      if (element.owner.toLowerCase() == address.toLowerCase()) {
-        dataa.push(element)
-      }
-    }
-    setData(dataa);
-  }
-  // console.log('user data', data);
-
 
   useEffect(() => {
     setTimeout(() => {
       setCopied(false);
     }, 2000);
   }, [copied]);
-
 
 
   return (
@@ -147,7 +105,7 @@ const User = () => {
           </div>
         </section>
         {/* <!-- end profile --> */}
-        <User_items data={data} />
+        <User_items data={allNfts} />
       </div>
     </>
   );

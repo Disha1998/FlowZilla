@@ -5,10 +5,8 @@ import { trendingCategoryData } from "../../data/categories_data";
 // import Recently_added_dropdown from "../dropdown/recently_added_dropdown";
 import { useSelector, useDispatch } from "react-redux";
 import { updateTrendingCategoryItemData } from "../../redux/counterSlice";
-import { SupercoolAuthContext } from "../../context/supercoolContext";
+import CategoryItemHome from "./CategoryItemHome";
 const Trending_categories_items = ({ data }) => {
-  const superCoolContext = React.useContext(SupercoolAuthContext);
-  const { allNfts } = superCoolContext;
   const [itemdata, setItemdata] = useState(data);
   const dispatch = useDispatch();
   const [filterVal, setFilterVal] = useState(0);
@@ -93,7 +91,7 @@ const Trending_categories_items = ({ data }) => {
       </div>
 
       {/* <!-- Grid --> */}
-      <CategoryItem data={itemdata} />
+      <CategoryItemHome data={itemdata} />
     </>
   );
 };

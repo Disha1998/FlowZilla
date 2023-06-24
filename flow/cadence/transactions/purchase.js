@@ -1,7 +1,7 @@
 export const purchaseTx = `
-import SuperCool from 0x71bbd2f430c9b437
+import SuperCool from 0xf7d3f70bbca64a11
 import NonFungibleToken from 0x631e88ae7f1d7c20
-import NFTMarketplace from 0x71bbd2f430c9b437
+import NFTMarketplace from 0xf7d3f70bbca64a11
 import FlowToken from 0x7e60df042a9c0868
 
 transaction(account: Address, id: UInt64) {

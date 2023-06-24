@@ -76,7 +76,7 @@ const BidsModal = () => {
                             </svg>
                           </span>
                           <span className="font-display text-jacarta-700 text-sm">
-                            MATIC
+                            FLOW
                           </span>
                         </div>
 
@@ -89,7 +89,7 @@ const BidsModal = () => {
                         />
 
                         <div className="bg-jacarta-50 border-jacarta-100 flex flex-1 justify-end self-stretch border-l dark:text-jacarta-700">
-                          <span className="self-center px-2 text-sm">${item.maticToUSD.toFixed(3)}</span>
+                          {/* <span className="self-center px-2 text-sm">${item.maticToUSD.toFixed(3)}</span> */}
                         </div>
                       </div>
 

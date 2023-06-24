@@ -107,7 +107,7 @@ const Item = () => {
 													</span>
 												</Tippy>
 												<span className="text-green text-sm font-medium tracking-tight">
-													{item.price} MATIC
+													{item.price} FLOW
 												</span>
 											</div>
 											<span className="dark:text-jacarta-300 text-jacarta-400 text-sm">
@@ -149,7 +149,10 @@ const Item = () => {
 													</span>
 													<Link href="/user/avatar_6">
 														<a className="text-accent block">
-															<span className="text-sm font-bold">{item.owner.slice(0, 11)}</span>
+															<span className="text-sm font-bold">
+																here owner address
+																{/* {item.owner.slice(0, 11)} */}
+															</span>
 														</a>
 													</Link>
 												</div>

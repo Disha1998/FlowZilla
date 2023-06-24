@@ -1,5 +1,5 @@
 export const unlistFromSaleTx = `
-import NFTMarketplace from 0x71bbd2f430c9b437
+import NFTMarketplace from 0xf7d3f70bbca64a11
 
 transaction(id: UInt64) {
 

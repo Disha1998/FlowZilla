@@ -10,19 +10,15 @@ import { SupercoolAuthContext } from "../../context/supercoolContext";
 import Tippy from "@tippyjs/react";
 import { MdKeyboardArrowRight, MdKeyboardArrowLeft } from "react-icons/md";
 import { bidsModalShow } from "../../redux/counterSlice";
-import { useDispatch } from "react-redux";
 import Likes from "../likes";
-import React from "react";
+import React, { useState, useContext, useEffect } from "react";
 
 const BidsCarousel = () => {
   const superCoolContext = React.useContext(SupercoolAuthContext);
-  const { allNfts } = superCoolContext;
-  const dispatch = useDispatch();
-  console.log(allNfts);
+  const { user,nftsForSell } = superCoolContext;
+  const [nfts, setNFTs] = useState([]);
+  console.log(nfts, 'nftssss');
 
-  const handleclick = () => {
-    console.log("clicked on ");
-  };
   return (
     <>
       <Swiper
@@ -50,15 +46,13 @@ const BidsCarousel = () => {
         }}
         className=" card-slider-4-columns !py-5"
       >
-        {allNfts && allNfts.map((item) => {
-          // console.log(item, 'item');
-
+        {nftsForSell && nftsForSell.map((item) => {
           return (
             <SwiperSlide key={item.id} className="text-white" >
               <article>
                 <div className="dark:bg-jacarta-700 dark:border-jacarta-700 border-jacarta-100 rounded-2xl block border bg-white p-[1.1875rem] transition-shadow hover:shadow-lg text-jacarta-500">
                   <figure>
-                    {/* <Link href={"/item/" + itemLink}> */}
+                    {/* <Link href={"/item/" + }> */}
                     <a>
                       <div className="w-full">
                         <Link href={`/item/${item.id}`}>
@@ -83,7 +77,7 @@ const BidsCarousel = () => {
                         {item.title}
                       </span>
                     </a>
-                    {/* <span className="dark:border-jacarta-600 border-jacarta-100 flex items-center whitespace-nowrap rounded-md border py-1 px-2">
+                    <span className="dark:border-jacarta-600 border-jacarta-100 flex items-center whitespace-nowrap rounded-md border py-1 px-2">
                       <Tippy content={<span>ETH</span>}>
                         <img
                           src="/images/eth-icon.svg"
@@ -96,7 +90,7 @@ const BidsCarousel = () => {
                         {item.price}
                         ETH
                       </span>
-                    </span> */}
+                    </span>
                   </div>
                   <div className="mt-2 text-sm">
                     <span className="dark:text-jacarta-300 text-jacarta-500">
@@ -113,7 +107,7 @@ const BidsCarousel = () => {
                       className="text-accent font-display text-sm font-semibold"
                       onClick={() => dispatch(bidsModalShow())}
                     >
-                      Purchase
+                      purchase
                     </button>
 
                     <Likes

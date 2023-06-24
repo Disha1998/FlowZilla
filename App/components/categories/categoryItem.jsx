@@ -2,8 +2,34 @@ import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import "tippy.js/dist/tippy.css";
 import Likes from "../likes";
+import { listForSaleTx } from "../../../flow/cadence/transactions/list_for_sale";
+import { SupercoolAuthContext } from "../../context/supercoolContext";
+import * as fcl from "@onflow/fcl";
+import * as t from "@onflow/types";
 const likes = 54;
 const CategoryItem = ({ data }) => {
+
+  const superCoolContext = React.useContext(SupercoolAuthContext);
+  const { storeSellNftOnFirebase } = superCoolContext;
+
+  const listForSale = async (_id,_price,_item) => {
+
+    await storeSellNftOnFirebase(_id,_item)
+    const transactionId = await fcl.send([
+        fcl.transaction(listForSaleTx),
+        fcl.args([
+            fcl.arg(parseInt(_id), t.UInt64),
+            fcl.arg(_price, t.UFix64)
+        ]),
+        fcl.payer(fcl.authz),
+        fcl.proposer(fcl.authz),
+        fcl.authorizations([fcl.authz]),
+        fcl.limit(9999)
+    ]).then(fcl.decode);
+
+    console.log(transactionId);
+    return fcl.tx(transactionId).onceSealed();
+}
 
   return (
     <div className="grid grid-cols-1 gap-[1.875rem] md:grid-cols-2 lg:grid-cols-4">
@@ -44,7 +70,7 @@ const CategoryItem = ({ data }) => {
                 </span>
                 <span className="dark:text-jacarta-300 text-jacarta-500">
                   {/* 1/1 */}
-                  ~ ${item.maticToUSD.toFixed(3)}
+                  ~ ${item.maticToUSD}
                 </span>
               </div>
 
@@ -58,8 +84,8 @@ const CategoryItem = ({ data }) => {
                   <svg className="icon icon-history group-hover:fill-accent dark:fill-jacarta-200 fill-jacarta-500 mr-1 mb-[3px] h-4 w-4">
                     <use xlinkHref="/icons.svg#icon-history"></use>
                   </svg>
-                  <span className="group-hover:text-accent font-display dark:text-jacarta-200 text-sm font-semibold">
-                    View History
+                  <span onClick={() => listForSale(item.id,item.price,item)}  className="group-hover:text-accent font-display dark:text-jacarta-200 text-sm font-semibold">
+                   List NFT for Sale
                   </span>
                 </a>
               </div>

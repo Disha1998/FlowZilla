@@ -6,7 +6,7 @@ import Trending_categories_items from "./trending_categories_items";
 import { SupercoolAuthContext } from "../../context/supercoolContext";
 const Tranding_category = () => {
   const superCoolContext = React.useContext(SupercoolAuthContext);
-  const { allNfts } = superCoolContext;
+  const { nftsForSell } = superCoolContext;
   return (
     <section className="py-24">
       <div className="container">
@@ -17,7 +17,7 @@ const Tranding_category = () => {
         />
 
         {/* trending categories */}
-        <Trending_categories_items data={allNfts}/>
+        <Trending_categories_items data={nftsForSell}/>
       </div>
     </section>
   );

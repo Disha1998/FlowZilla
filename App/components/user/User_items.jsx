@@ -1,14 +1,53 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import Image from "next/image";
 import Trending_categories_items from "../categories/trending_categories_items";
 import { SupercoolAuthContext } from "../../context/supercoolContext";
-const User_items = ({ data }) => {
-  const superCoolContext = React.useContext(SupercoolAuthContext);
-  const { userAdd, allNfts } = superCoolContext;
+import OwnedNFTs from "../categories/Owned_nfts";
+import * as fcl from "@onflow/fcl";
+import * as t from "@onflow/types";
+import { getNFTsScript } from "../../../flow/cadence/scripts/get_nfts";
+
+
+const User_items = () => {
   const [itemActive, setItemActive] = useState(1);
 
-  // console.log('data in items',data);
+  const superCoolContext = React.useContext(SupercoolAuthContext);
+  const [nfts, setNFTs] = useState([]);
+
+  const { user, nftsForSell } = superCoolContext;
+  useEffect(() => {
+    if (user?.addr !== undefined) {
+      getUserNFTs();
+
+    }
+  }, [user?.addr])
+
+  const getUserNFTs = async () => {
+    let account = user?.addr
+    // console.log('address',account);
+    const result = await fcl.send([
+      fcl.script(getNFTsScript),
+      fcl.args([
+        fcl.arg(account, t.Address)
+      ])
+    ]).then(fcl.decode);
+
+    console.log('result==>', result);
+    let metadataa = []
+    for (let i = 0; i < result.length; i++) {
+      const tokenURI = result[i].ipfsHash;
+      const tokenid = result[i].id;
+      const response = await fetch(tokenURI);
+      const metadata = await response.json();
+      const newMetadata = {...metadata, id : tokenid}
+      metadataa.push(newMetadata)
+    }
+
+    setNFTs(metadataa);
+  }
+
+  // console.log('nfts==>', nfts);
 
 
   const tabItem = [
@@ -72,7 +111,7 @@ const User_items = ({ data }) => {
               <div>
                 {/* <!-- Filter --> */}
                 <Trending_categories_items
-                  data={data}
+                  data={nftsForSell}
                 />
               </div>
             </TabPanel>
@@ -80,8 +119,8 @@ const User_items = ({ data }) => {
 
             <TabPanel>
               <div>
-                <Trending_categories_items
-                  data={data}
+                <OwnedNFTs
+                  data={nfts}
                 />
               </div>
             </TabPanel>

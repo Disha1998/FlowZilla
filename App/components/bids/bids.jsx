@@ -3,7 +3,7 @@ import "swiper/css/navigation";
 import { HeadLine } from "../component";
 import "tippy.js/dist/tippy.css";
 import BidsCarousel from "../carousel/bidsCarousel";
-
+import { getCollection } from "@onflow/fcl";
 const Bids = ({ classes = "pt-10 pb-24", bgWhite }) => {
   return (
     <section className={classes}>

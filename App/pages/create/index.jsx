@@ -27,8 +27,9 @@ const Create = () => {
     prompt,
     setPrompt,
     genRanImgLoding,
-    getAllNfts,
+    getUserNFTs,
     user,
+    storeNftOnFirebase
   } = superCoolContext;
   const [title, setTitle] = useState("default");
   const [category, setCategory] = useState("Profile avatar" || category);
@@ -166,6 +167,7 @@ const Create = () => {
         .then(fcl.decode);
       console.log(transactionId, "<=transactionId");
       setMintLoading(false);
+      // alert - nft minted successfully!!
       return fcl.tx(transactionId).onceSealed();
 
     } catch (error) {
@@ -173,7 +175,7 @@ const Create = () => {
     setMintLoading(false);
 
     }
-    user && (await getAllNfts(user.addr));
+    user && (await getUserNFTs());
     setLoading(!loading);
     setMintLoading(false);
     setImages([]);
@@ -190,24 +192,26 @@ const Create = () => {
     signer = provider.getSigner();
   }
 
-  const contract = new ethers.Contract(SUPER_COOL_NFT_CONTRACT, abi, signer);
 
   const nftData = {
     title: title,
     description: description,
     price: price,
     chain: chain,
+    owner: user?.addr,
     image:
-      "https://bafkreif4urrcdypupvez7ombtizi2asquarxhm3tojckbl35if5zzdqbpi.ipfs.nftstorage.link/",
+      "https://bafkreia4siyqdzdskc4p7anx3uhpce3kqc5tt26xa7w63mjzdr3fop6ohe.ipfs.nftstorage.link/",
     category: category,
   };
   const createNft = async () => {
-    console.log(nftData);
+    // console.log(nftData);
     setMintLoading(true);
     let metadataurl = await uploadOnIpfs(nftData);
     // await setupUser();
+    await storeNftOnFirebase(metadataurl);
+    
     console.log('metadataurl', metadataurl);
-    mintNft(ethers.utils.parseUnits(nftData.price?.toString(), "ether"), metadataurl);
+    mintNft(ethers.utils.parseUnits(price?.toString(), "ether"), metadataurl);
 
   };
 
