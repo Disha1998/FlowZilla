@@ -45,7 +45,7 @@ export const SupercoolAuthContextProvider = (props) => {
   }, []);
   // console.log(user.addr,'user');
 
-
+  console.log(process.env.apiKey, '======');
 
   const auth =
     "Basic " +
@@ -110,7 +110,7 @@ export const SupercoolAuthContextProvider = (props) => {
       const tokenid = result[i].id;
       const response = await fetch(tokenURI);
       const metadata = await response.json();
-      const newMetadata = {...metadata, id : tokenid}
+      const newMetadata = { ...metadata, id: tokenid }
       metadataa.push(newMetadata)
     }
     setAllNfts(metadataa);

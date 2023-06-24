@@ -253,7 +253,7 @@ const Create = () => {
                       We're excited to bring your NFT to life, but we need your
                       input. Please provide us with a brief description of what
                       you want it to look like. Or
-                      <span>
+                      {/* <span>
                         <a
                           className="hover:text-accent dark:hover:text-white text-jacarta-700 font-bold font-display mb-6 text-center text-md dark:text-white md:text-left lg:text-md xl:text-md animate-gradient"
                           style={{ cursor: "pointer" }}
@@ -264,7 +264,7 @@ const Create = () => {
                             ? "generating random prompt..."
                             : "generate random image."}{" "}
                         </a>
-                      </span>
+                      </span> */}
                     </p>
 
                     <textarea
