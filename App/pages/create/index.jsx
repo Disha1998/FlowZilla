@@ -19,6 +19,7 @@ import * as t from "@onflow/types"
 const Create = () => {
   const superCoolContext = React.useContext(SupercoolAuthContext);
   const {
+    isInitialized,
     uploadOnIpfs,
     handleImgUpload,
     loading,
@@ -29,7 +30,8 @@ const Create = () => {
     genRanImgLoding,
     getUserNFTs,
     user,
-    storeNftOnFirebase
+    storeNftOnFirebase,
+    checkInit
   } = superCoolContext;
   const [title, setTitle] = useState("default");
   const [category, setCategory] = useState("Profile avatar" || category);
@@ -70,7 +72,6 @@ const Create = () => {
   const client = new NFTStorage({ token: NFT_STORAGE_TOKEN });
 
   const setupUser = async () => {
-    
         const transactionId = await fcl
       .send([
         fcl.transaction(setupUserTx),
@@ -81,7 +82,6 @@ const Create = () => {
         fcl.limit(9999),
       ])
       .then(fcl.decode);
-
     console.log(transactionId);
     return fcl.tx(transactionId).onceSealed();
   };
@@ -166,8 +166,10 @@ const Create = () => {
         ])  
         .then(fcl.decode);
       console.log(transactionId, "<=transactionId");
+    await storeNftOnFirebase(_metadataurl);
+
       setMintLoading(false);
-      // alert - nft minted successfully!!
+      checkInit();
       return fcl.tx(transactionId).onceSealed();
 
     } catch (error) {
@@ -207,9 +209,12 @@ const Create = () => {
     // console.log(nftData);
     setMintLoading(true);
     let metadataurl = await uploadOnIpfs(nftData);
+    if (!isInitialized) {
+      console.log('is initializes val in create',isInitialized);
     await setupUser();
     await storeNftOnFirebase(metadataurl);
     
+    }
     console.log('metadataurl', metadataurl);
     mintNft(ethers.utils.parseUnits(price?.toString(), "ether"), metadataurl);
 

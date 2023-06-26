@@ -1,31 +1,19 @@
 import React, { useEffect, useState } from "react";
-import { useRouter } from "next/router";
-import Link from "next/link";
-// import Auctions_dropdown from "../../components/dropdown/Auctions_dropdown";
-import user_data from "../../data/user_data";
 import User_items from "../../components/user/User_items";
 import Tippy from "@tippyjs/react";
 import "tippy.js/dist/tippy.css"; // optional
 import { CopyToClipboard } from "react-copy-to-clipboard";
-import Head from "next/head";
-import Meta from "../../components/Meta";
 import { SupercoolAuthContext } from "../../context/supercoolContext";
-import localforage from 'localforage'
 
 
 const User = () => {
 
   const [address, setAddress] = useState();
-  const router = useRouter();
-  const [walletAddress, setWalletAddress] = useState(undefined);
-  const pid = router.query.user;
   const [coverePhoto, setCoverePhoto] = useState();
   const [username, setUsername] = useState();
   const [bio, setBio] = useState("");
   const [profilePhoto, setProfilePhoto] = useState();
-  const [likesImage, setLikesImage] = useState(false);
   const [copied, setCopied] = useState(false);
-  const [data, setData] = useState([]);
   const superCoolContext = React.useContext(SupercoolAuthContext);
   const { allNfts, getProfileData } = superCoolContext;
 

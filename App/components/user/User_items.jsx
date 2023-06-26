@@ -13,39 +13,38 @@ const User_items = () => {
   const [itemActive, setItemActive] = useState(1);
 
   const superCoolContext = React.useContext(SupercoolAuthContext);
-  const [nfts, setNFTs] = useState([]);
+  // const [nfts, setNFTs] = useState([]);
 
-  const { user, nftsForSell } = superCoolContext;
-  useEffect(() => {
-    if (user?.addr !== undefined) {
-      getUserNFTs();
+  const { user, nftsForSell, currentUserCreatedNFT } = superCoolContext;
+  // useEffect(() => {
+  //   if (user?.addr !== undefined) {
+  //     getUserNFTs();
+  //   }
+  // }, [user?.addr])
 
-    }
-  }, [user?.addr])
+  // const getUserNFTs = async () => {
+  //   let account = user?.addr
+  //   // console.log('address',account);
+  //   const result = await fcl.send([
+  //     fcl.script(getNFTsScript),
+  //     fcl.args([
+  //       fcl.arg(account, t.Address)
+  //     ])
+  //   ]).then(fcl.decode);
 
-  const getUserNFTs = async () => {
-    let account = user?.addr
-    // console.log('address',account);
-    const result = await fcl.send([
-      fcl.script(getNFTsScript),
-      fcl.args([
-        fcl.arg(account, t.Address)
-      ])
-    ]).then(fcl.decode);
+  //   console.log('result==>', result);
+  //   let metadataa = []
+  //   for (let i = 0; i < result.length; i++) {
+  //     const tokenURI = result[i].ipfsHash;
+  //     const tokenid = result[i].id;
+  //     const response = await fetch(tokenURI);
+  //     const metadata = await response.json();
+  //     const newMetadata = {...metadata, id : tokenid}
+  //     metadataa.push(newMetadata)
+  //   }
 
-    console.log('result==>', result);
-    let metadataa = []
-    for (let i = 0; i < result.length; i++) {
-      const tokenURI = result[i].ipfsHash;
-      const tokenid = result[i].id;
-      const response = await fetch(tokenURI);
-      const metadata = await response.json();
-      const newMetadata = {...metadata, id : tokenid}
-      metadataa.push(newMetadata)
-    }
-
-    setNFTs(metadataa);
-  }
+  //   setNFTs(metadataa);
+  // }
 
   // console.log('nfts==>', nfts);
 
@@ -120,7 +119,7 @@ const User_items = () => {
             <TabPanel>
               <div>
                 <OwnedNFTs
-                  data={nfts}
+                  data={currentUserCreatedNFT}
                 />
               </div>
             </TabPanel>

@@ -17,7 +17,7 @@ const BidsCarousel = () => {
   const superCoolContext = React.useContext(SupercoolAuthContext);
   const { user,nftsForSell } = superCoolContext;
   const [nfts, setNFTs] = useState([]);
-  console.log(nfts, 'nftssss');
+  // console.log(nfts, 'nftssss');
 
   return (
     <>
@@ -105,7 +105,7 @@ const BidsCarousel = () => {
                     <button
                       type="button"
                       className="text-accent font-display text-sm font-semibold"
-                      onClick={() => dispatch(bidsModalShow())}
+                      // onClick={() => dispatch(bidsModalShow())}
                     >
                       purchase
                     </button>

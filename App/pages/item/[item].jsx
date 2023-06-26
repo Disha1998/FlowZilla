@@ -23,7 +23,6 @@ const Item = () => {
 	const superCoolContext = React.useContext(SupercoolAuthContext);
 	const { allNfts, contract } = superCoolContext;
 
-
 	return (
 		<>
 			<Meta title={`${pid} || Xhibiter | NFT Marketplace Next.js Template`} />
