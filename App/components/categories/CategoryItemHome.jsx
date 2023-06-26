@@ -8,7 +8,7 @@ import * as fcl from "@onflow/fcl";
 import * as t from "@onflow/types";
 const likes = 54;
 const CategoryItemHome = ({ data }) => {
-console.log(data);
+// console.log(data);
   return (
     <div className="grid grid-cols-1 gap-[1.875rem] md:grid-cols-2 lg:grid-cols-4">
       {data && data.map((item) => {

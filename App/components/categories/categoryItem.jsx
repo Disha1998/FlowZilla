@@ -13,22 +13,26 @@ const CategoryItem = ({ data }) => {
   const { storeSellNftOnFirebase } = superCoolContext;
 
   const listForSale = async (_id,_price,_item) => {
-
-    await storeSellNftOnFirebase(_id,_item)
-    const transactionId = await fcl.send([
-        fcl.transaction(listForSaleTx),
-        fcl.args([
-            fcl.arg(parseInt(_id), t.UInt64),
-            fcl.arg(_price, t.UFix64)
-        ]),
-        fcl.payer(fcl.authz),
-        fcl.proposer(fcl.authz),
-        fcl.authorizations([fcl.authz]),
-        fcl.limit(9999)
-    ]).then(fcl.decode);
-
-    console.log(transactionId);
-    return fcl.tx(transactionId).onceSealed();
+    try {
+      const transactionId = await fcl.send([
+          fcl.transaction(listForSaleTx),
+          fcl.args([
+              fcl.arg(parseInt(_id), t.UInt64),
+              fcl.arg(_price, t.UFix64)
+          ]),
+          fcl.payer(fcl.authz),
+          fcl.proposer(fcl.authz),
+          fcl.authorizations([fcl.authz]),
+          fcl.limit(9999)
+      ]).then(fcl.decode);
+  
+      console.log(transactionId);
+      await storeSellNftOnFirebase(_id,_item);
+      return fcl.tx(transactionId).onceSealed();  
+    } catch (error) {
+     console.log(error); 
+    }
+    
 }
 
   return (

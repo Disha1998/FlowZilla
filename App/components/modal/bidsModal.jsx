@@ -14,30 +14,35 @@ const BidsModal = () => {
   const { bidsModal } = useSelector((state) => state.counter);
   const dispatch = useDispatch();
   const superCoolContext = React.useContext(SupercoolAuthContext);
-  const { allNfts, contract, user } = superCoolContext;
+  const { allNfts, user } = superCoolContext;
   const [buyLoading, setBuyLoading] = useState(false);
 
-  const purchaseNft = async (id, _price) => {
-    console.log('_tokenId', id);
-    setBuyLoading(true);
-    let account = user.addr;
-    const transactionId = await fcl.send([
-      fcl.transaction(purchaseTx),
-      fcl.args([
-        fcl.arg(account, t.Address),
-        fcl.arg(parseInt(id), t.UInt64)
-      ]),
-      fcl.payer(fcl.authz),
-      fcl.proposer(fcl.authz),
-      fcl.authorizations([fcl.authz]),
-      fcl.limit(9999)
-    ]).then(fcl.decode);
+  const purchaseNft = async (_account, _id) => {
 
-    console.log(transactionId);
-    setBuyLoading(false);
+    try {
+      setBuyLoading(true);
+      const transactionId = await fcl.send([
+        fcl.transaction(purchaseTx),
+        fcl.args([
+          fcl.arg(_account, t.Address),
+          fcl.arg(parseInt(_id), t.UInt64)
+        ]),
+        fcl.payer(fcl.authz),
+        fcl.proposer(fcl.authz),
+        fcl.authorizations([fcl.authz]),
+        fcl.limit(9999)
+      ]).then(fcl.decode);
+  
+      console.log(transactionId);
+      setBuyLoading(false);
+      return fcl.tx(transactionId).onceSealed();
+  
+    } catch (error) {
+     console.log(error); 
+     setBuyLoading(false);
 
-    return fcl.tx(transactionId).onceSealed();
-
+    }
+   
   }
 
   const router = useRouter();
@@ -118,7 +123,7 @@ const BidsModal = () => {
                             <CircularProgress />
                             :
                             <button
-                              onClick={() => purchaseNft(item.id, item.price)}
+                              onClick={() => purchaseNft(item.owner, item.id)}
                               type="button"
                               className="text-accent shadow-white-volume hover:bg-accent-dark hover:shadow-accent-volume w-36 rounded-full bg-white py-3 px-8 text-center font-semibold transition-all hover:text-white"
                             >
