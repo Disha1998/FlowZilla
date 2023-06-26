@@ -149,7 +149,7 @@ const Create = () => {
   // JD CORS Solution END -------------------
 
   const mintNft = async (_price, _metadataurl) => {
-    const hash = _metadataurl;
+    const ipfsHash = _metadataurl;
     const name = title;
     try {
       const transactionId = await fcl
@@ -208,7 +208,6 @@ const Create = () => {
     setMintLoading(true);
     let metadataurl = await uploadOnIpfs(nftData);
     await setupUser();
-    // await setupUser();
     await storeNftOnFirebase(metadataurl);
     
     console.log('metadataurl', metadataurl);
