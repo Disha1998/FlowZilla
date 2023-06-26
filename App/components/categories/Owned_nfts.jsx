@@ -9,6 +9,7 @@ import { updateTrendingCategoryItemData } from "../../redux/counterSlice";
 
 const OwnedNFTs = ({ data }) => {
     const [itemdata, setItemdata] = useState(data);
+    // console.log(itemdata);
     const dispatch = useDispatch();
     const [filterVal, setFilterVal] = useState(0);
 

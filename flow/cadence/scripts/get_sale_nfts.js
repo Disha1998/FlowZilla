@@ -1,26 +1,26 @@
 export const getSaleNFTsScript = `
-import SuperCool from 0xf7d3f70bbca64a11
+import SuperFlo from 0xa5a0ef4be9f25990
 import NonFungibleToken from 0x631e88ae7f1d7c20
-import NFTMarketplace from 0xf7d3f70bbca64a11
+import SeperNFTMarketplace from 0xa5a0ef4be9f25990
 
-pub fun main(account: Address): {UInt64: NFTMarketplace.SaleItem} {
+pub fun main(account: Address): {UInt64: SeperNFTMarketplace.SaleItem} {
   let saleCollection = getAccount(account).getCapability(/public/MySaleCollection)
-                        .borrow<&NFTMarketplace.SaleCollection{NFTMarketplace.SaleCollectionPublic}>()
+                        .borrow<&SeperNFTMarketplace.SaleCollection{SeperNFTMarketplace.SaleCollectionPublic}>()
                         ?? panic("Could not borrow the user's SaleCollection")
 
   let collection = getAccount(account).getCapability(/public/SuperCoolCollection) 
-                    .borrow<&SuperCool.Collection{NonFungibleToken.CollectionPublic, SuperCool.CollectionPublic}>()
+                    .borrow<&SuperFlo.Collection{NonFungibleToken.CollectionPublic, SuperFlo.CollectionPublic}>()
                     ?? panic("Can't get the User's collection.")
 
   let saleIDs = saleCollection.getIDs()
 
-  let returnVals: {UInt64: NFTMarketplace.SaleItem} = {}
+  let returnVals: {UInt64: SeperNFTMarketplace.SaleItem} = {}
 
   for saleID in saleIDs {
     let price = saleCollection.getPrice(id: saleID)
     let nftRef = collection.borrowEntireNFT(id: saleID)
 
-    returnVals.insert(key: nftRef.id, NFTMarketplace.SaleItem(_price: price, _nftRef: nftRef))
+    returnVals.insert(key: nftRef.id, SeperNFTMarketplace.SaleItem(_price: price, _nftRef: nftRef))
   }
 
   return returnVals

@@ -1,13 +1,13 @@
 export const mintNFTFLow = `
-import SuperCool from 0xf7d3f70bbca64a11
+import SuperFlo from 0xa5a0ef4be9f25990
 
 transaction(ipfsHash: String, name: String) {
 
   prepare(acct: AuthAccount) {
-    let collection = acct.borrow<&SuperCool.Collection>(from: /storage/SuperCoolCollection)
+    let collection = acct.borrow<&SuperFlo.Collection>(from: /storage/SuperCoolCollection)
                         ?? panic("This collection does not exist here")
 
-    let nft <- SuperCool.createToken(ipfsHash: ipfsHash, metadata: {"name": name})
+    let nft <- SuperFlo.createToken(ipfsHash: ipfsHash, metadata: {"name": name})
 
     collection.deposit(token: <- nft)
   }

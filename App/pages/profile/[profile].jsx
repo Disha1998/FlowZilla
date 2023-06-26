@@ -13,30 +13,26 @@ import localforage from 'localforage'
 import { abi, SUPER_COOL_NFT_CONTRACT } from '../../constant/constant';
 const Edit_user = () => {
 	const superCoolContext = React.useContext(SupercoolAuthContext);
-	const { uploadDatainIpfs, handleImgUpload, getProfileData } = superCoolContext;
+	const { storeUserProfile, handleImgUpload, getProfileData,user } = superCoolContext;
 	const [coverePhoto, setCoverePhoto] = useState();
 	const [username, setUsername] = useState("");
-	const [walletAddress, setWalletAddress] = useState(undefined);
 	const [bio, setBio] = useState("");
 	const [profilePhoto, setProfilePhoto] = useState();
 	// Profile data
 
-	localforage.getItem('address').then((value) => {
-		setWalletAddress(value)
-	})
 	const Profiledata = {
 		username: username,
 		bio: bio,
 		profilephoto: profilePhoto,
 		coverimage: coverePhoto,
-		walletAddress: walletAddress
+		walletAddress: user?.addr
 	}
 
 	useEffect(() => {
-		if (walletAddress !== undefined) {
-			editProfileData();
+		if (user?.addr !== undefined) {
+			// editProfileData();
 		}
-	}, [walletAddress])
+	}, [user?.addr])
 
 	let provider;
 	let signer;
@@ -71,25 +67,19 @@ const Edit_user = () => {
 
 	const editProfileData = async () => {
 
-		localforage.getItem('address').then(async (value) => {
-			setWalletAddress(value)
+		// localforage.getItem('address').then(async (value) => {
 			const response = await getProfileData(value);
 			console.log(response);
 			setUsername(response.data.username)
 			setBio(response.data.bio)
 			setCoverePhoto(response.data.coverimage);
 			setProfilePhoto(response.data.profilephoto)
-		})
+		// })
 	}
 
 	const updateProfile = async () => {
 		console.log(Profiledata);
-		let url = await uploadDatainIpfs(Profiledata);
-		console.log('metadataurl==', url);
-
-		const tx = await contract.storeProfileData(url);
-		await tx.wait();
-
+		await storeUserProfile(Profiledata)
 	}
 	// console.log('Data', Data);
 
@@ -190,7 +180,7 @@ const Edit_user = () => {
 										className="dark:bg-jacarta-700 border-jacarta-100 hover:ring-accent/10 focus:ring-accent dark:border-jacarta-600 dark:placeholder:text-jacarta-300 w-full rounded-lg py-3 hover:ring-2 dark:text-white px-3"
 										placeholder="wallet address"
 										required
-										value={walletAddress}
+										value={user?.addr}
 										disabled
 									// onChange={UsernameEvent}
 									/>
