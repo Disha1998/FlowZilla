@@ -15,7 +15,7 @@ const User_items = () => {
   const superCoolContext = React.useContext(SupercoolAuthContext);
   // const [nfts, setNFTs] = useState([]);
 
-  const { user, nftsForSell, allNfts } = superCoolContext;
+  const { user, nftsForSell, currentUserCreatedNFT } = superCoolContext;
   // useEffect(() => {
   //   if (user?.addr !== undefined) {
   //     getUserNFTs();
@@ -119,7 +119,7 @@ const User_items = () => {
             <TabPanel>
               <div>
                 <OwnedNFTs
-                  data={allNfts}
+                  data={currentUserCreatedNFT}
                 />
               </div>
             </TabPanel>

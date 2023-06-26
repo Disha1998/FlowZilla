@@ -21,6 +21,7 @@ export const SupercoolAuthContextProvider = (props) => {
 
   const [loading, setLoading] = useState(false);
   const [allNfts, setAllNfts] = useState([]);
+  const [currentUserCreatedNFT, setCurrentUserCreatedNFT] = useState([]);
   const [prompt, setPrompt] = useState("");
   const [user, setUser] = useState();
   const [nftsForSell, setNFTsForSell] = useState([]);
@@ -115,17 +116,26 @@ const firebaseConfig = {
     try {
       const querySnapshot = await getDocs(NFTcollectionRef);
       const data = querySnapshot.docs.map((doc) => doc.data());
-      const metadatas = [];
+      const currentUserNft = [];
+      const allNft = [];
 
       for (let i = 0; i < data.length; i++) {
         let tokenid = data[i].id;
         let tokenURI = data[i].url;
         const response = await fetch(tokenURI);
         const metadata = await response.json();
-        const newMetadata = {...metadata, id:tokenid}
-        metadatas.push(newMetadata);
-      }console.log('all nftss--',metadatas);
-      setAllNfts(metadatas);
+        console.log(metadata);
+        if (metadata.owner == user?.addr) {
+          const newMetadata = {...metadata, id:tokenid}
+          currentUserNft.push(newMetadata); 
+        }
+
+        const allNftData = {...metadata, id:tokenid}
+        allNft.push(allNftData);
+
+      }console.log('all nftss--',currentUserNft);
+      setCurrentUserCreatedNFT(currentUserNft);
+      setAllNfts(allNft);
     } catch (error) {
       console.error("Error fetching data: ", error);
       return [];
@@ -272,7 +282,8 @@ const firebaseConfig = {
         storeNftOnFirebase,
         storeSellNftOnFirebase,
         isInitialized,
-        checkInit
+        checkInit,
+        currentUserCreatedNFT
       }}
       {...props}
     >
