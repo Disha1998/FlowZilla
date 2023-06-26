@@ -8,7 +8,7 @@ import * as fcl from "@onflow/fcl";
 import * as t from "@onflow/types";
 const likes = 54;
 const CategoryItem = ({ data }) => {
-
+console.log('data for sale',data);
   const superCoolContext = React.useContext(SupercoolAuthContext);
   const { storeSellNftOnFirebase } = superCoolContext;
 

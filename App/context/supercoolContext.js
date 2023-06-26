@@ -11,7 +11,7 @@ import * as t from "@onflow/types";
 import { getSaleNFTsScript } from "../../flow/cadence/scripts/get_sale_nfts";
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
-import { getFirestore, collection, addDoc, getDocs } from "firebase/firestore";
+import { getFirestore, collection, addDoc, getDocs, doc } from "firebase/firestore";
 import { getTotalTokenSupply } from "../../flow/cadence/scripts/get_totalSupply";
 import { checkIsInitialized } from "../../flow/cadence/scripts/checkIsInitialized_collection";
 export const SupercoolAuthContext = createContext(undefined);
@@ -24,15 +24,15 @@ export const SupercoolAuthContextProvider = (props) => {
   const [currentUserCreatedNFT, setCurrentUserCreatedNFT] = useState([]);
   const [prompt, setPrompt] = useState("");
   const [user, setUser] = useState();
-  const [nftsForSell, setNFTsForSell] = useState([]);
+  const [allNftsForSell, setAllNFTsForSell] = useState([]);
+  const [allNftsOfCurrentUserForSell, setAllNFTsOfCurrentUserForSell] = useState([]);
   const [isInitialized, setIsInitialized] = useState(false);
 
   useEffect(() => {
     fcl.currentUser().subscribe(setUser);
     getUserNFTs();
-      getUserSaleNFTs();
-
-  }, []);
+    getUserSaleNFTs();
+  }, [user?.addr]);
   // console.log(user.addr,'user addr');
 
 
@@ -124,16 +124,17 @@ const firebaseConfig = {
         let tokenURI = data[i].url;
         const response = await fetch(tokenURI);
         const metadata = await response.json();
-        console.log(metadata);
+
+        const allNftData = {...metadata, id:tokenid}
+        allNft.push(allNftData);
         if (metadata.owner == user?.addr) {
           const newMetadata = {...metadata, id:tokenid}
           currentUserNft.push(newMetadata); 
         }
 
-        const allNftData = {...metadata, id:tokenid}
-        allNft.push(allNftData);
-
-      }console.log('all nftss--',currentUserNft);
+      }
+      // console.log('current users nftss--',currentUserNft);
+      // console.log('all nftss--',allNft);
       setCurrentUserCreatedNFT(currentUserNft);
       setAllNfts(allNft);
     } catch (error) {
@@ -147,18 +148,47 @@ const firebaseConfig = {
       const querySnapshot = await getDocs(SellNFTcollectionRef);
       const data = querySnapshot.docs.map((doc) => doc.data());
       console.log('sell nft data',data);
-      const metadatas = [];
+      const allForSell = [];
+      const allNFTForSellCurrentUser = [];
 
       for (let i = 0; i < data.length; i++) {
         let dataa = data[i].data;
-        metadatas.push(dataa);
+        allForSell.push(dataa);
+        if (dataa.owner == user?.addr) {
+          allNFTForSellCurrentUser.push(dataa);
+        }
       }
-      setNFTsForSell(metadatas);
+      console.log('current users sell nftss--',allNFTForSellCurrentUser);
+      console.log('All sell nftss--',allForSell);
+
+      setAllNFTsForSell(allForSell);
+      setAllNFTsOfCurrentUserForSell(allNFTForSellCurrentUser);
     } catch (error) {
       console.error("Error fetching data: ", error);
       return [];
     }
   }
+
+
+  async function storeUserProfile( profileData) {
+    // const firestore = getFirestore();
+    const collectionName = "userProfiles";
+    const documentRef = doc(collection(firestore, collectionName), user?.addr);
+  
+    try {
+      await setDoc(documentRef, profileData);
+      console.log("User profile data stored successfully!");
+    } catch (error) {
+      console.error("Error storing user profile data: ", error);
+    }
+  }
+
+
+
+
+
+
+
 
   useEffect(() => {
     if (user?.addr) {
@@ -197,8 +227,8 @@ const firebaseConfig = {
   //     ])
   //   ]).then(fcl.decode);
 
-  //   console.log(result);
-
+  //   console.log(result,"result");
+  // }
 
   //   let metadataa = [];
   //   const values = Object.values(result);
@@ -264,7 +294,6 @@ const firebaseConfig = {
   return (
     <SupercoolAuthContext.Provider
       value={{
-        nftsForSell,
         uploadOnIpfs,
         allNfts,
         handleImgUpload,
@@ -275,7 +304,6 @@ const firebaseConfig = {
         setPrompt,
         user,
         uploadDatainIpfs,
-        // getAllNfts,
         getUserNFTs,
         generateText,
         getTotalSupply,
@@ -283,7 +311,10 @@ const firebaseConfig = {
         storeSellNftOnFirebase,
         isInitialized,
         checkInit,
-        currentUserCreatedNFT
+        currentUserCreatedNFT,
+        storeUserProfile,
+        allNftsOfCurrentUserForSell,
+        allNftsForSell,
       }}
       {...props}
     >
