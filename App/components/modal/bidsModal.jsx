@@ -8,35 +8,36 @@ import { CircularProgress } from "@mui/material";
 import { purchaseTx } from "../../../flow/cadence/transactions/purchase";
 import * as t from "@onflow/types";
 import * as fcl from "@onflow/fcl";
-
+import { setupUserTx } from "../../../flow/cadence/transactions/setup_user";
+import { flowicon } from "../../public/images/flow-icon.png"
 
 const BidsModal = () => {
   const { bidsModal } = useSelector((state) => state.counter);
   const dispatch = useDispatch();
   const superCoolContext = React.useContext(SupercoolAuthContext);
-  const { allNfts, user,isInitialized } = superCoolContext;
+  const { allNfts, user, isInitialized } = superCoolContext;
   const [buyLoading, setBuyLoading] = useState(false);
 
   const setupUser = async () => {
     const transactionId = await fcl
-  .send([
-    fcl.transaction(setupUserTx),
-    fcl.args([]),
-    fcl.payer(fcl.authz),
-    fcl.proposer(fcl.authz),
-    fcl.authorizations([fcl.authz]),
-    fcl.limit(9999),
-  ])
-  .then(fcl.decode);
-console.log(transactionId);
-return fcl.tx(transactionId).onceSealed();
-};
+      .send([
+        fcl.transaction(setupUserTx),
+        fcl.args([]),
+        fcl.payer(fcl.authz),
+        fcl.proposer(fcl.authz),
+        fcl.authorizations([fcl.authz]),
+        fcl.limit(9999),
+      ])
+      .then(fcl.decode);
+    console.log(transactionId);
+    return fcl.tx(transactionId).onceSealed();
+  };
 
   const purchaseNft = async (_account, _id) => {
 
     if (!isInitialized) {
-      console.log('is initializes val in create',isInitialized);
-    await setupUser();
+      console.log('is initializes val in create', isInitialized);
+      await setupUser();
     }
 
     try {
@@ -52,17 +53,17 @@ return fcl.tx(transactionId).onceSealed();
         fcl.authorizations([fcl.authz]),
         fcl.limit(9999)
       ]).then(fcl.decode);
-  
+
       console.log(transactionId);
       setBuyLoading(false);
       return fcl.tx(transactionId).onceSealed();
-  
+
     } catch (error) {
-     console.log(error); 
-     setBuyLoading(false);
+      console.log(error);
+      setBuyLoading(false);
 
     }
-   
+
   }
 
   const router = useRouter();
@@ -112,7 +113,7 @@ return fcl.tx(transactionId).onceSealed();
                         <div className="border-jacarta-100 bg-jacarta-50 flex flex-1 items-center self-stretch border-r px-2">
                           <span>
                             <svg className="icon icon-ETH mr-1 h-5 w-5">
-                              <use xlinkHref="/icons.svg#icon-ETH"></use>
+                              <use xlinkHref={flowicon}></use>
                             </svg>
                           </span>
                           <span className="font-display text-jacarta-700 text-sm">

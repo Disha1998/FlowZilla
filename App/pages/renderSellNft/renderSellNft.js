@@ -6,12 +6,12 @@ const RendersellNft = ({ rendersellNFT, setTitle, setDescription, setPrice, crea
     const blockChainOptionsText = [
         {
             id: 1,
-            text: 'Ethereum',
+            text: 'Flow',
         },
-        {
-            id: 2,
-            text: 'Polygon',
-        },
+        // {
+        //     id: 2,
+        //     text: 'flow',
+        // },
 
     ];
     const categoryOptionsText = [

@@ -36,24 +36,24 @@ const Collection_category_filter = () => {
 			text: 'Auction Ending Soon',
 		},
 	];
-	const blockchainText = [
-		{
-			id: 1,
-			text: 'Ethereum',
-		},
-		{
-			id: 2,
-			text: 'Polygon',
-		},
-		{
-			id: 3,
-			text: 'Flow',
-		},
-		{
-			id: 4,
-			text: 'Tezos',
-		},
-	];
+	// const blockchainText = [
+	// 	{
+	// 		id: 1,
+	// 		text: 'Ethereum',
+	// 	},
+	// 	{
+	// 		id: 2,
+	// 		text: 'Polygon',
+	// 	},
+	// 	{
+	// 		id: 3,
+	// 		text: 'Flow',
+	// 	},
+	// 	{
+	// 		id: 4,
+	// 		text: 'Tezos',
+	// 	},
+	// ];
 	const categoryText = [
 		{
 			id: 1,

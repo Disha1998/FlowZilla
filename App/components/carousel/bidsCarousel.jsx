@@ -80,15 +80,15 @@ const BidsCarousel = () => {
                     <span className="dark:border-jacarta-600 border-jacarta-100 flex items-center whitespace-nowrap rounded-md border py-1 px-2">
                       <Tippy content={<span>Flow</span>}>
                         <img
-                          src="/images/eth-icon.svg"
+                          src="/images/flow-icon.png"
                           alt=""
                           className="w-3 h-3 mr-1"
                         />
                       </Tippy>
 
                       <span className="text-green text-sm font-medium tracking-tight">
-                        {item.price}
-                        ETH
+                        {item.price} {" "}
+                        FLOW
                       </span>
                     </span>
                   </div>
@@ -97,7 +97,6 @@ const BidsCarousel = () => {
                       {item.description}
                     </span>
                     <span className="dark:text-jacarta-100 text-jacarta-700">
-                      {/* {bid_number} ETH */}
                     </span>
                   </div>
 
@@ -107,7 +106,7 @@ const BidsCarousel = () => {
                       className="text-accent font-display text-sm font-semibold"
                       // onClick={() => dispatch(bidsModalShow())}
                     >
-                      purchase
+                      Purchase
                     </button>
 
                     <Likes

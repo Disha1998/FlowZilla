@@ -13,7 +13,7 @@ const rankings_data = [
 		h24Color: 'red',
 		d7Color: 'green',
 		category: 'Art',
-		blockchain: 'Ethereum',
+		blockchain: 'Flow',
 		postDate: 'Last 7 Days',
 	},
 	{
@@ -160,7 +160,7 @@ const rankings_data = [
 		d7Color: 'red',
 
 		category: 'Music',
-		blockchain: 'Ethereum',
+		blockchain: 'Flow',
 		postDate: 'Last 60 Days',
 	},
 	{
@@ -312,7 +312,7 @@ const rankings_data = [
 		h24Color: 'green',
 		d7Color: 'red',
 		category: 'Domain',
-		blockchain: 'Ethereum',
+		blockchain: 'Flow',
 		postDate: 'Last 14 Days',
 	},
 	{

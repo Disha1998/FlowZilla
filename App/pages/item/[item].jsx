@@ -99,11 +99,7 @@ const Item = () => {
 										<div className="mb-8 flex items-center space-x-4 whitespace-nowrap">
 											<div className="flex items-center">
 												<Tippy content={<span>FLOW</span>}>
-													<span className="-ml-1">
-														<svg className="icon mr-1 h-4 w-4">
-															<use xlinkHref="/icons.svg#icon-ETH"></use>
-														</svg>
-													</span>
+												
 												</Tippy>
 												<span className="text-green text-sm font-medium tracking-tight">
 													{item.price} FLOW
