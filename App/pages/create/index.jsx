@@ -202,7 +202,7 @@ const Create = () => {
     chain: chain,
     owner: user?.addr,
     image:
-      "https://bafkreia4siyqdzdskc4p7anx3uhpce3kqc5tt26xa7w63mjzdr3fop6ohe.ipfs.nftstorage.link/",
+      "https://bafkreihwfi4ptyrrsapnjesjzbyoscqx2ft4zwol7p7ysfhgmjuhdgjuga.ipfs.nftstorage.link/",
     category: category,
   };
   const createNft = async () => {
