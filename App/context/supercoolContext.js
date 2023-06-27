@@ -147,7 +147,7 @@ const firebaseConfig = {
     try {
       const querySnapshot = await getDocs(SellNFTcollectionRef);
       const data = querySnapshot.docs.map((doc) => doc.data());
-      console.log('sell nft data',data);
+      // console.log('sell nft data',data);
       const allForSell = [];
       const allNFTForSellCurrentUser = [];
 
@@ -158,8 +158,8 @@ const firebaseConfig = {
           allNFTForSellCurrentUser.push(dataa);
         }
       }
-      console.log('current users sell nftss--',allNFTForSellCurrentUser);
-      console.log('All sell nftss--',allForSell);
+      // console.log('current users sell nftss--',allNFTForSellCurrentUser);
+      // console.log('All sell nftss--',allForSell);
 
       setAllNFTsForSell(allForSell);
       setAllNFTsOfCurrentUserForSell(allNFTForSellCurrentUser);
@@ -198,13 +198,15 @@ const firebaseConfig = {
 
   // const getUserNFTs = async () => {
   //   let account = user?.addr
+  //   console.log(account);
   //   const result = await fcl.send([
   //     fcl.script(getNFTsScript),
   //     fcl.args([
   //       fcl.arg(account, t.Address)
   //     ])
   //   ]).then(fcl.decode);
-
+  //   console.log(result);
+  // }
   //   let metadataa = []
   //   for (let i = 0; i < result.length; i++) {
   //     const tokenURI = result[i].ipfsHash;

@@ -14,10 +14,30 @@ const BidsModal = () => {
   const { bidsModal } = useSelector((state) => state.counter);
   const dispatch = useDispatch();
   const superCoolContext = React.useContext(SupercoolAuthContext);
-  const { allNfts, user } = superCoolContext;
+  const { allNfts, user,isInitialized } = superCoolContext;
   const [buyLoading, setBuyLoading] = useState(false);
 
+  const setupUser = async () => {
+    const transactionId = await fcl
+  .send([
+    fcl.transaction(setupUserTx),
+    fcl.args([]),
+    fcl.payer(fcl.authz),
+    fcl.proposer(fcl.authz),
+    fcl.authorizations([fcl.authz]),
+    fcl.limit(9999),
+  ])
+  .then(fcl.decode);
+console.log(transactionId);
+return fcl.tx(transactionId).onceSealed();
+};
+
   const purchaseNft = async (_account, _id) => {
+
+    if (!isInitialized) {
+      console.log('is initializes val in create',isInitialized);
+    await setupUser();
+    }
 
     try {
       setBuyLoading(true);
