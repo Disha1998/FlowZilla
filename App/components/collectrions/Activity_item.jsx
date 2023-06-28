@@ -62,7 +62,7 @@ const Activity_item = () => {
 												alt={title}
 												height={50}
 												width={50}
-												objectFit="cover"
+												// objectFit="cover"
 												className="rounded-2lg"
 												loading="lazy"
 											/>

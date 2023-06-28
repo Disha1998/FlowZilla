@@ -108,7 +108,7 @@ const Auctions_categories = () => {
                             height="100%"
                             width="100%"
                             layout="responsive"
-                            objectFit="cover"
+                            // objectFit="cover"
                           />
                         </a>
                       </Link>

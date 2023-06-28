@@ -132,7 +132,7 @@ const Top_collection = () => {
                           className="rounded-2lg"
                           height={48}
                           width={48}
-                          objectFit="cover"
+                          // objectFit="cover"
                         />
                         <div className="dark:border-jacarta-600 bg-jacarta-700 absolute -left-3 top-1/2 flex h-6 w-6 -translate-y-2/4 items-center justify-center rounded-full border-2 border-white text-xs text-white">
                           {id}

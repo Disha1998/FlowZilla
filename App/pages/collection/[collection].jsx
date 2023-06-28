@@ -33,7 +33,7 @@ const Collection = () => {
 						src="/images/collections/collection_banner.jpg"
 						alt="banner"
 						layout="fill"
-						objectFit="cover"
+						// objectFit="cover"
 					/>
 				</div>
 				{/* <!-- end banner --> */}
@@ -53,7 +53,7 @@ const Collection = () => {
 											src={image}
 											alt={title}
 											layout="fill"
-											objectFit="contain"
+											// objectFit="contain"
 											className="dark:border-jacarta-600 rounded-xl border-[5px] border-white"
 										/>
 										<div

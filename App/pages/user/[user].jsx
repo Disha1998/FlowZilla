@@ -47,7 +47,7 @@ const User = () => {
                 src={profilePhoto}
                 alt={username}
                 layout="fill"
-                objectFit="contain"
+                // objectFit="contain"
                 className="dark:border-jacarta-600 rounded-xl border-[5px] border-white"
               />
 

@@ -31,7 +31,6 @@ export const SupercoolAuthContextProvider = (props) => {
   // let defPrompt = "I want you to act as a prompt engineer. You will help me write prompts for an ai art generator called Midjourney. I will provide you with short content ideas and your job is to elaborate these into full, explicit, coherent prompts. Prompts involve describing the content and style of images in concise accurate language. It is useful to be explicit and use references to popular culture, artists and mediums. Your focus needs to be on nouns and adjectives. I will give you some example prompts for your reference. Please define the exact camera that should be used Here is a formula for you to use(content insert nouns here)(medium: insert artistic medium here)(style: insert references to genres, artists and popular culture here)(lighting, reference the lighting here)(colours reference color styles and palettes here)(composition: reference cameras, specific lenses, shot types and positional elements here) when giving a prompt remove the brackets, speak in natural language and be more specific, use precise, articulate language. Example prompt: Portrait of a Celtic Jedi Sentinel with wet Shamrock Armor, green lightsaber, by Aleksi Briclot, shiny wet dramatic lighting. For now if understand what I asked to you just replay 'write anything'. And write full prompt from next request. "
 
   const [loading, setLoading] = useState(false);
-  const [allNfts, setAllNfts] = useState([]);
   const [currentUserCreatedNFT, setCurrentUserCreatedNFT] = useState([]);
   const [prompt, setPrompt] = useState("");
   const [user, setUser] = useState();
@@ -144,7 +143,7 @@ export const SupercoolAuthContextProvider = (props) => {
     querySnapshot.forEach((fire) => {
       console.log(fire.data());
       const data = {
-        owner : user?.addr,
+        owner: user?.addr,
         forSale: false
       };
       const dataref = doc(db, "CreatedNFTsTokenUri", fire.id);
@@ -197,28 +196,29 @@ export const SupercoolAuthContextProvider = (props) => {
 
       for (let i = 0; i < data.length; i++) {
         let item = data[i];
-       let owner = item.owner;
-       let addr = user?.addr
-       let forSale = item.forSale;
+        var owner = item?.owner;
+        console.log('owner', owner);
+        let addr = user?.addr
+        let forSale = item.forSale;
 
-       if(forSale == true){
-        allNftsForSell.push(item)
-        if(owner = addr){
-        myNftsForSell.push(item)
+        if (forSale === true) {
+          allNftsForSell.push(item)
+          if (owner == addr) {
+            myNftsForSell.push(item)
+          }
+        } else if (owner == addr && forSale == false) {
+          myNfts.push(item)
         }
-       }else if(owner = addr && forSale == false){
-        myNfts.push(item)
-       }
-       
+
 
         setMyNFTs(myNfts);
         setMyNFTsForSell(myNftsForSell);
         setAllNFTsForSell(allNftsForSell);
-   
+
       }
-      console.log('My Nft NOT FOR SALE--',myNfts);
-      console.log('My Nft FOR SALE--',myNftsForSell);
-      console.log('All FOR SALE--',allNftsForSell);
+      console.log('My Nft NOT FOR SALE--', myNfts);
+      console.log('My Nft FOR SALE--', myNftsForSell);
+      console.log('All FOR SALE--', allNftsForSell);
     } catch (error) {
       console.error("Error fetching data: ", error);
       return [];
@@ -379,7 +379,6 @@ export const SupercoolAuthContextProvider = (props) => {
     <SupercoolAuthContext.Provider
       value={{
         uploadOnIpfs,
-        allNfts,
         handleImgUpload,
         client,
         loading,

@@ -18,9 +18,11 @@ const Item = () => {
 	const router = useRouter();
 	const pid = router.query.item;
 	const [imageModal, setImageModal] = useState(false);
+	const [currentPriceUSD, setCurrentPriceUSD] = useState();
 	const [maticToUSD, setMaticToUSD] = useState();
 	const superCoolContext = React.useContext(SupercoolAuthContext);
-	const { allNFTSForSell, contract } = superCoolContext;
+	const { allNFTSForSell, allNfts } = superCoolContext;
+
 
 	return (
 		<>
@@ -97,8 +99,13 @@ const Item = () => {
 
 										<div className="mb-8 flex items-center space-x-4 whitespace-nowrap">
 											<div className="flex items-center">
-												<Tippy content={<span>FLOW</span>}>
-												
+												<Tippy content={<span>ETH</span>}>
+													<span className="-ml-1">
+														<img
+															src="/images/flow-icon.png" alt='nooooo'
+															style={{ height: "20px", width: "20px" }}
+														/>
+													</span>
 												</Tippy>
 												<span className="text-green text-sm font-medium tracking-tight">
 													{item.price} FLOW
@@ -143,10 +150,7 @@ const Item = () => {
 													</span>
 													<Link href="/user/avatar_6">
 														<a className="text-accent block">
-															<span className="text-sm font-bold">
-																here owner address
-																{/* {item.owner.slice(0, 11)} */}
-															</span>
+															<span className="text-sm font-bold">{item.owner.slice(0, 11)}</span>
 														</a>
 													</Link>
 												</div>
@@ -159,8 +163,10 @@ const Item = () => {
 											<button
 												className="bg-accent shadow-accent-volume hover:bg-accent-dark inline-block w-full rounded-full py-3 px-8 text-center font-semibold text-white transition-all"
 												onClick={() => dispatch(bidsModalShow())}
+
 											>
 												Purchase NFT
+
 											</button>
 										</div>
 										{/* <!-- end bid --> */}

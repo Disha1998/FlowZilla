@@ -62,7 +62,7 @@ const BidsCarousel = () => {
                             height={230}
                             width={230}
                             layout="responsive"
-                            objectFit="cover"
+                            // objectFit="cover"
                             className="rounded-[0.625rem] w-full"
                             loading="lazy"
                           />
