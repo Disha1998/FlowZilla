@@ -12,6 +12,10 @@ const RendersellNft = ({ rendersellNFT, setTitle, setDescription, setPrice, crea
             id: 2,
             text: 'Polygon',
         },
+        // {
+        //     id: 2,
+        //     text: 'flow',
+        // },
 
     ];
     const categoryOptionsText = [

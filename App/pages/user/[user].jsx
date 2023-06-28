@@ -79,7 +79,7 @@ const User = () => {
                 src={profilePhoto}
                 alt={username}
                 layout="fill"
-                objectFit="contain"
+                // objectFit="contain"
                 className="dark:border-jacarta-600 rounded-xl border-[5px] border-white"
               />
 
@@ -92,13 +92,15 @@ const User = () => {
                 {username ? username : "user"}
               </h4>
               <div className="dark:bg-jacarta-700 dark:border-jacarta-600 border-jacarta-100 mb-8 inline-flex items-center justify-center rounded-full border bg-white py-1.5 px-4">
-                {/* <Tippy content="ETH"> */}
-
-                <svg className="icon h-4 w-4 mr-1">
-                    <use xlinkHref="/icons.svg#icon-ETH"></use>
-                  </svg>
-
-                {/* </Tippy> */}
+                <Tippy content="ETH">
+                  {/* <svg className="icon h-4 w-4 mr-1"> */}
+                    <img
+                      src="/images/flow-icon.png"
+                      style={{ height: "20px", width: "20px" }}
+                    />
+                   
+                  {/* </svg> */}
+                </Tippy>
 
                 <Tippy
                   hideOnClick={false}

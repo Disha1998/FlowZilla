@@ -75,7 +75,7 @@ const Feature_collections_carousel = () => {
                           className="rounded-[0.625rem]"
                           width={150}
                           height={240}
-                          objectFit="cover"
+                          // objectFit="cover"
                           layout="responsive"
                         />
                       </figure>

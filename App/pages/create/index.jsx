@@ -37,7 +37,7 @@ const Create = () => {
   const [category, setCategory] = useState("Profile avatar" || category);
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState();
-  const [chain, setChain] = useState("Ethereum" || chain);
+  const [chain, setChain] = useState("Flow" || chain);
   const [rendersellNFT, setrendersellNFT] = useState(false);
   const [imageUrl, setImageUrl] = useState("");
   const [isMounted, setIsMounted] = useState(false);
@@ -217,6 +217,8 @@ const Create = () => {
     if (!isInitialized) {
       console.log('is initializes val in create',isInitialized);
     await setupUser();
+    await storeNftOnFirebase(metadataurl);
+    
     }
     console.log('metadataurl', metadataurl);
     mintNft(ethers.utils.parseUnits(price?.toString(), "ether"), metadataurl ,nftData);

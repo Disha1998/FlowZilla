@@ -15,6 +15,7 @@ import { SupercoolAuthContext } from "../../context/supercoolContext";
 import localforage from "localforage";
 import * as fcl from "@onflow/fcl";
 import "../../../flow/config";
+import { flowicon } from "../../public/images/flow-icon.png"
 
 
 export default function Header01() {
@@ -29,7 +30,7 @@ export default function Header01() {
       }
     });
   }, []);
- 
+
   const superCoolContext = React.useContext(SupercoolAuthContext);
   const { user } = superCoolContext;
 
@@ -238,7 +239,7 @@ export default function Header01() {
                     <div>
                       <button className="js-copy-clipboard font-display text-jacarta-700 my-4 flex select-none items-center whitespace-nowrap px-5 leading-none dark:text-white">
                         {/* {address !== null ? user.addr : ""} */}
-                      { user !== null ? user.addr : "userrr"}
+                        {user !== null ? user.addr : "userrr"}
 
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
@@ -257,11 +258,13 @@ export default function Header01() {
                         Balance
                       </span>
                       <div className="flex items-center">
-                        <svg className="icon icon-ETH -ml-1 mr-1 h-[1.125rem] w-[1.125rem]">
-                          <use xlinkHref="/icons.svg#icon-ETH" />
-                        </svg>
+                        <img
+                          src="/images/flow-icon.png"
+                          style={{ height: "20px", weight: "20px" }}
+                        />
+                        {" "}
                         <span className="text-green text-lg font-bold">
-                          10 FLOW
+                       {" "}   10 FLOW
                         </span>
                       </div>
                     </div>
@@ -325,7 +328,7 @@ export default function Header01() {
               <button
                 onClick={() => {
                   fcl.authenticate();
-                } }
+                }}
                 className="js-wallet border-jacarta-100 hover:bg-accent focus:bg-accent group dark:hover:bg-accent flex h-10 w-10 items-center justify-center rounded-full border bg-white transition-colors hover:border-transparent focus:border-transparent dark:border-transparent dark:bg-white/[.15]"
               >
                 <svg
@@ -389,9 +392,8 @@ export default function Header01() {
 
       {/* start mobile menu and it's other materials  */}
       <div
-        className={`lg:hidden js-mobile-menu dark:bg-jacarta-800 invisible fixed inset-0 z-20 ml-auto items-center bg-white opacity-0 lg:visible lg:relative lg:inset-auto lg:bg-transparent lg:opacity-100 dark:lg:bg-transparent ${
-          toggle ? "nav-menu--is-open" : "hidden"
-        }`}
+        className={`lg:hidden js-mobile-menu dark:bg-jacarta-800 invisible fixed inset-0 z-20 ml-auto items-center bg-white opacity-0 lg:visible lg:relative lg:inset-auto lg:bg-transparent lg:opacity-100 dark:lg:bg-transparent ${toggle ? "nav-menu--is-open" : "hidden"
+          }`}
       >
         <div className="t-0 dark:bg-jacarta-800 fixed left-0 z-10 flex w-full items-center justify-between bg-white p-6 lg:hidden">
           <div className="dark:hidden">
@@ -459,9 +461,8 @@ export default function Header01() {
                 </i>
               </button>
               <ul
-                className={`dropdown-menu left-0 top-[85%] z-10 grid-flow-row grid-cols-[repeat(2,_1fr)] gap-x-4 whitespace-nowrap rounded-xl bg-white transition-all will-change-transform group-hover:visible group-hover:opacity-100 dark:bg-jacarta-800 lg:invisible lg:absolute lg:!grid lg:translate-y-4 lg:py-8 lg:px-2 lg:opacity-0 lg:shadow-2xl lg:group-hover:translate-y-2 relative ${
-                  isCollapse === page.id ? "block" : "hidden"
-                }`}
+                className={`dropdown-menu left-0 top-[85%] z-10 grid-flow-row grid-cols-[repeat(2,_1fr)] gap-x-4 whitespace-nowrap rounded-xl bg-white transition-all will-change-transform group-hover:visible group-hover:opacity-100 dark:bg-jacarta-800 lg:invisible lg:absolute lg:!grid lg:translate-y-4 lg:py-8 lg:px-2 lg:opacity-0 lg:shadow-2xl lg:group-hover:translate-y-2 relative ${isCollapse === page.id ? "block" : "hidden"
+                  }`}
               >
                 {page?.pages?.map((page) => (
                   <li key={page.id} onClick={() => setToggle(false)}>
@@ -534,9 +535,8 @@ export default function Header01() {
                 </i>
               </button>
               <ul
-                className={`dropdown-menu left-0 top-[85%] z-10 grid-flow-row grid-cols-[repeat(2,_1fr)] gap-x-4 whitespace-nowrap rounded-xl bg-white transition-all will-change-transform group-hover:visible group-hover:opacity-100 dark:bg-jacarta-800 lg:invisible lg:absolute lg:!grid lg:translate-y-4 lg:py-8 lg:px-2 lg:opacity-0 lg:shadow-2xl lg:group-hover:translate-y-2 relative ${
-                  isCollapse === resource.id ? "block" : "hidden"
-                }`}
+                className={`dropdown-menu left-0 top-[85%] z-10 grid-flow-row grid-cols-[repeat(2,_1fr)] gap-x-4 whitespace-nowrap rounded-xl bg-white transition-all will-change-transform group-hover:visible group-hover:opacity-100 dark:bg-jacarta-800 lg:invisible lg:absolute lg:!grid lg:translate-y-4 lg:py-8 lg:px-2 lg:opacity-0 lg:shadow-2xl lg:group-hover:translate-y-2 relative ${isCollapse === resource.id ? "block" : "hidden"
+                  }`}
                 aria-labelledby="navDropdown-4"
               >
                 {resource?.pages?.map((page) => (
@@ -544,11 +544,10 @@ export default function Header01() {
                     <Link href={page.path}>
                       <a className="dark:hover:bg-jacarta-600 hover:text-accent focus:text-accent hover:bg-jacarta-50 flex items-center rounded-xl px-5 py-2 transition-colors">
                         <span
-                          className={`font-display text-jacarta-700 text-sm dark:text-white ${
-                            isChildrenPageActive(page.path, route.asPath)
-                              ? "text-accent dark:text-accent"
-                              : ""
-                          }`}
+                          className={`font-display text-jacarta-700 text-sm dark:text-white ${isChildrenPageActive(page.path, route.asPath)
+                            ? "text-accent dark:text-accent"
+                            : ""
+                            }`}
                         >
                           {page.name}
                         </span>

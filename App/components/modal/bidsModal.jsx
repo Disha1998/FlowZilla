@@ -5,66 +5,32 @@ import { SupercoolAuthContext } from "../../context/supercoolContext";
 import { useRouter } from 'next/router';
 import { ethers } from "ethers";
 import { CircularProgress } from "@mui/material";
-import { purchaseTx } from "../../../flow/cadence/transactions/purchase";
-import { setupUserTx } from "../../../flow/cadence/transactions/setup_user";
-import * as t from "@onflow/types";
-import * as fcl from "@onflow/fcl";
-
-
+import { SUPER_COOL_NFT_CONTRACT, abi } from "../../constant/constant";
 const BidsModal = () => {
   const { bidsModal } = useSelector((state) => state.counter);
   const dispatch = useDispatch();
   const superCoolContext = React.useContext(SupercoolAuthContext);
-  const { allNfts, user, isInitialized } = superCoolContext;
+  const { allNFTSForSell } = superCoolContext;
   const [buyLoading, setBuyLoading] = useState(false);
 
-  const setupUser = async () => {
-    const transactionId = await fcl
-      .send([
-        fcl.transaction(setupUserTx),
-        fcl.args([]),
-        fcl.payer(fcl.authz),
-        fcl.proposer(fcl.authz),
-        fcl.authorizations([fcl.authz]),
-        fcl.limit(9999),
-      ])
-      .then(fcl.decode);
-    console.log(transactionId);
-    await fcl.tx(transactionId).onceSealed();
-  };
+  const purchaseNft = async (_tokenId, _price) => {
+    setBuyLoading(true);
+    const provider = new ethers.providers.Web3Provider(window.ethereum);
+    const signer = provider.getSigner();
 
-  const purchaseNft = async (_account, _id) => {
-
-    if (!isInitialized) {
-      console.log('is initializes val in create', isInitialized);
-      await setupUser();
-    }
-
+    const contract = new ethers.Contract(
+      SUPER_COOL_NFT_CONTRACT,
+      abi,
+      signer
+    );
     try {
-      setBuyLoading(true);
-      const transactionId = await fcl.send([
-        fcl.transaction(purchaseTx),
-        fcl.args([
-          fcl.arg(_account, t.Address),
-          fcl.arg(parseInt(_id), t.UInt64)
-        ]),
-        fcl.payer(fcl.authz),
-        fcl.proposer(fcl.authz),
-        fcl.authorizations([fcl.authz]),
-        fcl.limit(9999)
-      ]).then(fcl.decode);
-
-      
-      console.log(transactionId);
-      await fcl.tx(transactionId).onceSealed();
-      setBuyLoading(false);
+      const tx = await contract.buyToken(_tokenId, { value: ethers.utils.parseUnits(_price.toString(), "ether") });
+      await tx.wait();
 
     } catch (error) {
-      console.log(error);
-      setBuyLoading(false);
-
+      console.error(error);
     }
-
+    setBuyLoading(false);
   }
 
   const router = useRouter();
@@ -72,7 +38,7 @@ const BidsModal = () => {
   return (
     <div>
       {
-        allNfts.filter((item) => item.id == pid)
+        allNFTSForSell.filter((item) => item.id == pid)
           .map((item) => {
             console.log(item);
             return (
@@ -82,7 +48,7 @@ const BidsModal = () => {
                     <div className="modal-header">
                       <h5
                         className="modal-title" id="placeBidLabel">
-                        Purchase  {item.title}
+                        Purchase {item.title}
                       </h5>
                       <button
                         type="button"
@@ -111,14 +77,17 @@ const BidsModal = () => {
                       </div>
 
                       <div className="dark:border-jacarta-600 border-jacarta-100 relative mb-2 flex items-center overflow-hidden rounded-lg border">
+
+
                         <div className="border-jacarta-100 bg-jacarta-50 flex flex-1 items-center self-stretch border-r px-2">
                           <span>
-                            <svg className="icon icon-ETH mr-1 h-5 w-5">
-                              <use xlinkHref="/icons.svg#icon-ETH"></use>
-                            </svg>
+                            <img
+                              src="/images/flow-icon.png" alt='nooooo'
+                              style={{ height: "20px", width: "20px" }}
+                            />
                           </span>
                           <span className="font-display text-jacarta-700 text-sm">
-                            FLOW
+                            {" "} FLOW
                           </span>
                         </div>
 
@@ -130,9 +99,7 @@ const BidsModal = () => {
                           readOnly
                         />
 
-                        <div className="bg-jacarta-50 border-jacarta-100 flex flex-1 justify-end self-stretch border-l dark:text-jacarta-700">
-                          {/* <span className="self-center px-2 text-sm">${item.maticToUSD.toFixed(3)}</span> */}
-                        </div>
+
                       </div>
 
                     </div>
@@ -145,7 +112,7 @@ const BidsModal = () => {
                             <CircularProgress />
                             :
                             <button
-                              onClick={() => purchaseNft(item.owner, item.id)}
+                              onClick={() => purchaseNft(item.tokenId, item.price)}
                               type="button"
                               className="text-accent shadow-white-volume hover:bg-accent-dark hover:shadow-accent-volume w-36 rounded-full bg-white py-3 px-8 text-center font-semibold transition-all hover:text-white"
                             >

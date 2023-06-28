@@ -207,7 +207,7 @@ const Index = () => {
 														height={32}
 														width={32}
 														layout="responsive"
-														objectFit="contain"
+														// objectFit="contain"
 														className="rounded-2lg"
 													/>
 
