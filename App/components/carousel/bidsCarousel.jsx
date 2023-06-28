@@ -15,7 +15,7 @@ import React, { useState, useContext, useEffect } from "react";
 
 const BidsCarousel = () => {
   const superCoolContext = React.useContext(SupercoolAuthContext);
-  const { user,allNftsForSell } = superCoolContext;
+  const { user,allNFTSForSell } = superCoolContext;
   const [nfts, setNFTs] = useState([]);
   // console.log(nfts, 'nftssss');
 
@@ -46,7 +46,7 @@ const BidsCarousel = () => {
         }}
         className=" card-slider-4-columns !py-5"
       >
-        {allNftsForSell && allNftsForSell.map((item) => {
+        {allNFTSForSell && allNFTSForSell.map((item) => {
           return (
             <SwiperSlide key={item.id} className="text-white" >
               <article>

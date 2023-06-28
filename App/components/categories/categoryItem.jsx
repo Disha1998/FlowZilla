@@ -9,7 +9,7 @@ import * as t from "@onflow/types";
 const likes = 54;
 const CategoryItem = ({ data }) => {
   const superCoolContext = React.useContext(SupercoolAuthContext);
-  const { storeSellNftOnFirebase } = superCoolContext;
+  const { storeSellNftOnFirebase , updateForSale} = superCoolContext;
 
   const listForSale = async (_id,_price,_item) => {
     try {
@@ -26,14 +26,24 @@ const CategoryItem = ({ data }) => {
       ]).then(fcl.decode);
   
       console.log(transactionId);
-      await storeSellNftOnFirebase(_id,_item);
-      return fcl.tx(transactionId).onceSealed();  
+      const transactionStatus = await fcl.tx(transactionId).onceSealed();
+
+      if (transactionStatus.status === 4) {
+        console.log("Transaction succeeded!");
+        await storeSellNftOnFirebase(_id, _item);
+        await updateForSale(_item);
+      } else {
+        console.log("Transaction failed:", transactionStatus.errorMessage);
+      }
+
     } catch (error) {
      console.log(error); 
     }
-    
 }
 
+const SaleNft = async (_id,_price,_item) => {
+  listForSale(_id,_price,_item)
+}
   return (
     <div className="grid grid-cols-1 gap-[1.875rem] md:grid-cols-2 lg:grid-cols-4">
       {data && data.map((item) => {
@@ -87,7 +97,7 @@ const CategoryItem = ({ data }) => {
                   <svg className="icon icon-history group-hover:fill-accent dark:fill-jacarta-200 fill-jacarta-500 mr-1 mb-[3px] h-4 w-4">
                     <use xlinkHref="/icons.svg#icon-history"></use>
                   </svg>
-                  <span onClick={() => listForSale(item.id,item.price,item)}  className="group-hover:text-accent font-display dark:text-jacarta-200 text-sm font-semibold">
+                  <span onClick={() => SaleNft(item.id,item.price,item)}  className="group-hover:text-accent font-display dark:text-jacarta-200 text-sm font-semibold">
                    List NFT for Sale
                   </span>
                 </a>

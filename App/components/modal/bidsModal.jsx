@@ -6,6 +6,7 @@ import { useRouter } from 'next/router';
 import { ethers } from "ethers";
 import { CircularProgress } from "@mui/material";
 import { purchaseTx } from "../../../flow/cadence/transactions/purchase";
+import { setupUserTx } from "../../../flow/cadence/transactions/setup_user";
 import * as t from "@onflow/types";
 import * as fcl from "@onflow/fcl";
 
@@ -14,29 +15,29 @@ const BidsModal = () => {
   const { bidsModal } = useSelector((state) => state.counter);
   const dispatch = useDispatch();
   const superCoolContext = React.useContext(SupercoolAuthContext);
-  const { allNfts, user,isInitialized } = superCoolContext;
+  const { allNfts, user, isInitialized } = superCoolContext;
   const [buyLoading, setBuyLoading] = useState(false);
 
   const setupUser = async () => {
     const transactionId = await fcl
-  .send([
-    fcl.transaction(setupUserTx),
-    fcl.args([]),
-    fcl.payer(fcl.authz),
-    fcl.proposer(fcl.authz),
-    fcl.authorizations([fcl.authz]),
-    fcl.limit(9999),
-  ])
-  .then(fcl.decode);
-console.log(transactionId);
-return fcl.tx(transactionId).onceSealed();
-};
+      .send([
+        fcl.transaction(setupUserTx),
+        fcl.args([]),
+        fcl.payer(fcl.authz),
+        fcl.proposer(fcl.authz),
+        fcl.authorizations([fcl.authz]),
+        fcl.limit(9999),
+      ])
+      .then(fcl.decode);
+    console.log(transactionId);
+    await fcl.tx(transactionId).onceSealed();
+  };
 
   const purchaseNft = async (_account, _id) => {
 
     if (!isInitialized) {
-      console.log('is initializes val in create',isInitialized);
-    await setupUser();
+      console.log('is initializes val in create', isInitialized);
+      await setupUser();
     }
 
     try {
@@ -52,17 +53,18 @@ return fcl.tx(transactionId).onceSealed();
         fcl.authorizations([fcl.authz]),
         fcl.limit(9999)
       ]).then(fcl.decode);
-  
+
+      
       console.log(transactionId);
+      await fcl.tx(transactionId).onceSealed();
       setBuyLoading(false);
-      return fcl.tx(transactionId).onceSealed();
-  
+
     } catch (error) {
-     console.log(error); 
-     setBuyLoading(false);
+      console.log(error);
+      setBuyLoading(false);
 
     }
-   
+
   }
 
   const router = useRouter();
