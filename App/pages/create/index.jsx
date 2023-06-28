@@ -83,7 +83,7 @@ const Create = () => {
       ])
       .then(fcl.decode);
     console.log(transactionId);
-    return fcl.tx(transactionId).onceSealed();
+    await fcl.tx(transactionId).onceSealed();
   };
 
   const generateImage = async () => {
@@ -148,7 +148,7 @@ const Create = () => {
   };
   // JD CORS Solution END -------------------
 
-  const mintNft = async (_price, _metadataurl) => {
+  const mintNft = async (_price, _metadataurl , _nftData) => {
     const ipfsHash = _metadataurl;
     const name = title;
     try {
@@ -166,17 +166,21 @@ const Create = () => {
         ])  
         .then(fcl.decode);
       console.log(transactionId, "<=transactionId");
-    await storeNftOnFirebase(_metadataurl);
+      const transactionStatus = await fcl.tx(transactionId).onceSealed();
 
-      setMintLoading(false);
-      checkInit();
-      return fcl.tx(transactionId).onceSealed();
-
+      if (transactionStatus.status === 4) {
+        console.log("Transaction succeeded!");
+        await storeNftOnFirebase(_nftData);
+        setMintLoading(false);
+        checkInit();
+      } else {
+        console.log("Transaction failed:", transactionStatus.errorMessage);
+      }
     } catch (error) {
       console.log("Error: ", error);
     setMintLoading(false);
-
     }
+    
     user && (await getUserNFTs());
     setLoading(!loading);
     setMintLoading(false);
@@ -204,6 +208,7 @@ const Create = () => {
     image:
       "https://bafkreihwfi4ptyrrsapnjesjzbyoscqx2ft4zwol7p7ysfhgmjuhdgjuga.ipfs.nftstorage.link/",
     category: category,
+    forSale : false
   };
   const createNft = async () => {
     // console.log(nftData);
@@ -216,7 +221,7 @@ const Create = () => {
     
     }
     console.log('metadataurl', metadataurl);
-    mintNft(ethers.utils.parseUnits(price?.toString(), "ether"), metadataurl);
+    mintNft(ethers.utils.parseUnits(price?.toString(), "ether"), metadataurl ,nftData);
 
   };
 

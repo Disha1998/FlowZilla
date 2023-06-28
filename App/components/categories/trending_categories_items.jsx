@@ -10,7 +10,7 @@ const Trending_categories_items = ({ data }) => {
   const [itemdata, setItemdata] = useState(data);
   const dispatch = useDispatch();
   const [filterVal, setFilterVal] = useState(0);
-
+// console.log(data);
 
 
   const handleFilter = (category) => {

@@ -6,6 +6,7 @@ import { useRouter } from 'next/router';
 import { ethers } from "ethers";
 import { CircularProgress } from "@mui/material";
 import { purchaseTx } from "../../../flow/cadence/transactions/purchase";
+import { setupUserTx } from "../../../flow/cadence/transactions/setup_user";
 import * as t from "@onflow/types";
 import * as fcl from "@onflow/fcl";
 import { setupUserTx } from "../../../flow/cadence/transactions/setup_user";
@@ -30,7 +31,7 @@ const BidsModal = () => {
       ])
       .then(fcl.decode);
     console.log(transactionId);
-    return fcl.tx(transactionId).onceSealed();
+    await fcl.tx(transactionId).onceSealed();
   };
 
   const purchaseNft = async (_account, _id) => {
@@ -54,9 +55,10 @@ const BidsModal = () => {
         fcl.limit(9999)
       ]).then(fcl.decode);
 
+      
       console.log(transactionId);
+      await fcl.tx(transactionId).onceSealed();
       setBuyLoading(false);
-      return fcl.tx(transactionId).onceSealed();
 
     } catch (error) {
       console.log(error);

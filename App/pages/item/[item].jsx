@@ -18,10 +18,9 @@ const Item = () => {
 	const router = useRouter();
 	const pid = router.query.item;
 	const [imageModal, setImageModal] = useState(false);
-	const [currentPriceUSD, setCurrentPriceUSD] = useState();
 	const [maticToUSD, setMaticToUSD] = useState();
 	const superCoolContext = React.useContext(SupercoolAuthContext);
-	const { allNfts, contract } = superCoolContext;
+	const { allNFTSForSell, contract } = superCoolContext;
 
 	return (
 		<>
@@ -33,7 +32,7 @@ const Item = () => {
 				</picture>
 				<div className="container">
 					{/* <!-- Item --> */}
-					{allNfts
+					{allNFTSForSell
 						.filter((item) => item.id == pid)
 						.map((item) => {
 							return (

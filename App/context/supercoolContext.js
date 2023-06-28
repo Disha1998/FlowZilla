@@ -11,9 +11,20 @@ import * as t from "@onflow/types";
 import { getSaleNFTsScript } from "../../flow/cadence/scripts/get_sale_nfts";
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
-import { getFirestore, collection, addDoc, getDocs, doc } from "firebase/firestore";
 import { getTotalTokenSupply } from "../../flow/cadence/scripts/get_totalSupply";
 import { checkIsInitialized } from "../../flow/cadence/scripts/checkIsInitialized_collection";
+import {
+  collection,
+  addDoc,
+  getFirestore,
+  getDocs,
+  updateDoc,
+  doc,
+  deleteDoc,
+  query,
+  where,
+} from "firebase/firestore";
+import { getStorage } from 'firebase/storage';
 export const SupercoolAuthContext = createContext(undefined);
 
 export const SupercoolAuthContextProvider = (props) => {
@@ -24,21 +35,25 @@ export const SupercoolAuthContextProvider = (props) => {
   const [currentUserCreatedNFT, setCurrentUserCreatedNFT] = useState([]);
   const [prompt, setPrompt] = useState("");
   const [user, setUser] = useState();
-  const [allNftsForSell, setAllNFTsForSell] = useState([]);
   const [allNftsOfCurrentUserForSell, setAllNFTsOfCurrentUserForSell] = useState([]);
   const [isInitialized, setIsInitialized] = useState(false);
+  const [refresh, setRefresh] = useState(false);
+
+  const [myNFTs, setMyNFTs] = useState([]);
+  const [myNFTsForSell, setMyNFTsForSell] = useState([]);
+  const [allNFTSForSell, setAllNFTsForSell] = useState([]);
+
 
   useEffect(() => {
     fcl.currentUser().subscribe(setUser);
     getUserNFTs();
-    getUserSaleNFTs();
-  }, [user?.addr]);
+  }, [user?.addr, refresh]);
   // console.log(user.addr,'user addr');
 
 
-    const checkInit = async () => {
+  const checkInit = async () => {
     let account = user?.addr
-    console.log('address',account);
+    console.log('address', account);
     const isInit = await fcl.send([
       fcl.script(checkIsInitialized),
       fcl.args([
@@ -71,110 +86,177 @@ export const SupercoolAuthContextProvider = (props) => {
       fcl.script(getTotalTokenSupply),
       fcl.args([])
     ]).then(fcl.decode);
-    console.log('total supply',result);
+    console.log('total supply', result);
     return result;
   }
-const firebaseConfig = {
-  apiKey: "AIzaSyCGVjsvfInkjCDotvdP6kY_TWdpyvz7uCo",
-  authDomain: "superflow-f2e91.firebaseapp.com",
-  projectId: "superflow-f2e91",
-  storageBucket: "superflow-f2e91.appspot.com",
-  messagingSenderId: "367934501039",
-  appId: "1:367934501039:web:22c3a59e90c6ba3260e45a",
-  measurementId: "G-F945HDRM1P"
-};
-  
+  const firebaseConfig = {
+    apiKey: "AIzaSyCGVjsvfInkjCDotvdP6kY_TWdpyvz7uCo",
+    authDomain: "superflow-f2e91.firebaseapp.com",
+    projectId: "superflow-f2e91",
+    storageBucket: "superflow-f2e91.appspot.com",
+    messagingSenderId: "367934501039",
+    appId: "1:367934501039:web:22c3a59e90c6ba3260e45a",
+    measurementId: "G-F945HDRM1P"
+  };
+
   // Initialize Firebase
   const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+  const storage = getStorage(app);
 
-  const firestore = getFirestore();
-  const NFTcollectionRef = collection(firestore, "CreatedNFTsTokenUri");
-  const SellNFTcollectionRef = collection(firestore, "SellNFTData");
+  const NFTcollectionRef = collection(db, "CreatedNFTsTokenUri");
+  const SellNFTcollectionRef = collection(db, "SellNFTData");
 
-  async function storeNftOnFirebase(metadataUrl) {
-    
+
+
+  const storeNftOnFirebase = async (_item) => {
     let tokenid = await getTotalSupply();
     console.log(tokenid);
-    const newData = {
-      id: tokenid,
-      url: metadataUrl
-    };
-    const docRef = await addDoc(NFTcollectionRef, newData);
-    console.log("Data stored successfully! Document ID:", docRef.id);
+    const newData = { ..._item, id: tokenid }
+    addDoc(NFTcollectionRef, newData);
+    console.log("Data stored! Doc");
   }
 
-  async function storeSellNftOnFirebase(_id,_item){
-    const newData = {
-      id : _id,
-      data : _item 
-    }
-    const docRef = await addDoc(SellNFTcollectionRef, newData);
-    console.log("Sell NFT Stored", docRef.id);
+  const updateForSale = async (item) => {
+    const q = query(
+      collection(db, "CreatedNFTsTokenUri"),
+      where("id", "==", item.id)
+    );
+    const querySnapshot = await getDocs(q);
+    querySnapshot.forEach((fire) => {
+      console.log(fire.data());
+      const data = {
+        forSale: true
+      };
+      const dataref = doc(db, "CreatedNFTsTokenUri", fire.id);
+      updateDoc(dataref, data);
+      console.log(fire.data());
+    })
+    console.log('done');
   }
+
+  const updateForPurchase = async (id) => {
+    const q = query(
+      collection(db, "CreatedNFTsTokenUri"),
+      where("id", "==", id)
+    );
+    const querySnapshot = await getDocs(q);
+    querySnapshot.forEach((fire) => {
+      console.log(fire.data());
+      const data = {
+        owner : user?.addr,
+        forSale: false
+      };
+      const dataref = doc(db, "CreatedNFTsTokenUri", fire.id);
+      updateDoc(dataref, data);
+      console.log(fire.data());
+    })
+    console.log('done');
+  }
+
+  // updateValues()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  // async function storeSellNftOnFirebase(_id, _item) {
+  //   const newData = { ..._item, id: _id }
+  //   const docRef = await addDoc(SellNFTcollectionRef, newData);
+  //   console.log("Sell NFT Stored", docRef.id);
+  // }
 
   async function getUserNFTs() {
     try {
       const querySnapshot = await getDocs(NFTcollectionRef);
       const data = querySnapshot.docs.map((doc) => doc.data());
-      const currentUserNft = [];
-      const allNft = [];
+      // console.log(data.length);
+      let myNfts = [];
+      let myNftsForSell = [];
+      let allNftsForSell = [];
 
       for (let i = 0; i < data.length; i++) {
-        let tokenid = data[i].id;
-        let tokenURI = data[i].url;
-        const response = await fetch(tokenURI);
-        const metadata = await response.json();
+        let item = data[i];
+       let owner = item.owner;
+       let addr = user?.addr
+       let forSale = item.forSale;
 
-        const allNftData = {...metadata, id:tokenid}
-        allNft.push(allNftData);
-        if (metadata.owner == user?.addr) {
-          const newMetadata = {...metadata, id:tokenid}
-          currentUserNft.push(newMetadata); 
+       if(forSale == true){
+        allNftsForSell.push(item)
+        if(owner = addr){
+        myNftsForSell.push(item)
         }
+       }else if(owner = addr && forSale == false){
+        myNfts.push(item)
+       }
+       
 
+        setMyNFTs(myNfts);
+        setMyNFTsForSell(myNftsForSell);
+        setAllNFTsForSell(allNftsForSell);
+   
       }
-      // console.log('current users nftss--',currentUserNft);
-      // console.log('all nftss--',allNft);
-      setCurrentUserCreatedNFT(currentUserNft);
-      setAllNfts(allNft);
+      console.log('My Nft NOT FOR SALE--',myNfts);
+      console.log('My Nft FOR SALE--',myNftsForSell);
+      console.log('All FOR SALE--',allNftsForSell);
     } catch (error) {
       console.error("Error fetching data: ", error);
       return [];
     }
   }
 
-  async function getUserSaleNFTs() {
-    try {
-      const querySnapshot = await getDocs(SellNFTcollectionRef);
-      const data = querySnapshot.docs.map((doc) => doc.data());
-      // console.log('sell nft data',data);
-      const allForSell = [];
-      const allNFTForSellCurrentUser = [];
+  // async function getUserSaleNFTs() {
+  //   try {
+  //     const querySnapshot = await getDocs(SellNFTcollectionRef);
+  //     const data = querySnapshot.docs.map((doc) => doc.data());
+  //     // console.log('sell nft data',data);
+  //     const allForSell = [];
+  //     const allNFTForSellCurrentUser = [];
 
-      for (let i = 0; i < data.length; i++) {
-        let dataa = data[i].data;
-        allForSell.push(dataa);
-        if (dataa.owner == user?.addr) {
-          allNFTForSellCurrentUser.push(dataa);
-        }
-      }
-      // console.log('current users sell nftss--',allNFTForSellCurrentUser);
-      // console.log('All sell nftss--',allForSell);
+  //     for (let i = 0; i < data.length; i++) {
+  //       let dataa = data[i].data;
+  //       allForSell.push(dataa);
+  //       if (dataa.owner == user?.addr) {
+  //         allNFTForSellCurrentUser.push(dataa);
+  //       }
+  //     }
+  //     console.log('current users sell nftss--',allNFTForSellCurrentUser);
+  //     console.log('All sell nftss--',allForSell);
 
-      setAllNFTsForSell(allForSell);
-      setAllNFTsOfCurrentUserForSell(allNFTForSellCurrentUser);
-    } catch (error) {
-      console.error("Error fetching data: ", error);
-      return [];
-    }
-  }
+  //     setAllNFTsForSell(allForSell);
+  //     setAllNFTsOfCurrentUserForSell(allNFTForSellCurrentUser);
+  //   } catch (error) {
+  //     console.error("Error fetching data: ", error);
+  //     return [];
+  //   }
+  // }
 
 
-  async function storeUserProfile( profileData) {
+  async function storeUserProfile(profileData) {
     // const firestore = getFirestore();
     const collectionName = "userProfiles";
     const documentRef = doc(collection(firestore, collectionName), user?.addr);
-  
+
     try {
       await setDoc(documentRef, profileData);
       console.log("User profile data stored successfully!");
@@ -310,13 +392,18 @@ const firebaseConfig = {
         generateText,
         getTotalSupply,
         storeNftOnFirebase,
-        storeSellNftOnFirebase,
+        // storeSellNftOnFirebase,
         isInitialized,
         checkInit,
         currentUserCreatedNFT,
         storeUserProfile,
         allNftsOfCurrentUserForSell,
-        allNftsForSell,
+        refresh,
+        setRefresh,
+        updateForSale,
+        myNFTs,
+        myNFTsForSell,
+        allNFTSForSell
       }}
       {...props}
     >
