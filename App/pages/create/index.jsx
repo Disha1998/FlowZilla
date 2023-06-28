@@ -217,8 +217,6 @@ const Create = () => {
     if (!isInitialized) {
       console.log('is initializes val in create',isInitialized);
     await setupUser();
-    await storeNftOnFirebase(metadataurl);
-    
     }
     console.log('metadataurl', metadataurl);
     mintNft(ethers.utils.parseUnits(price?.toString(), "ether"), metadataurl ,nftData);

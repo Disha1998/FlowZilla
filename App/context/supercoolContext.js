@@ -59,7 +59,7 @@ export const SupercoolAuthContextProvider = (props) => {
         fcl.arg(account, t.Address)
       ])
     ]).then(fcl.decode);
-    // console.log('result==>', isInit);
+    console.log('result==>', isInit);
     setIsInitialized(isInit);
   }
 
@@ -361,7 +361,8 @@ export const SupercoolAuthContextProvider = (props) => {
         myNFTsForSell,
         allNFTSForSell,
         UserProfileRef,
-        db
+        db,
+        updateForPurchase
       }}
       {...props}
     >

@@ -1,7 +1,7 @@
 export const getTotalTokenSupply = `
-import SuperFlo from 0xa5a0ef4be9f25990
+import superflo1 from 0x4afc162bce5d7fb4
 
 pub fun main(): UInt64 {
-  return SuperFlo.totalSupply
+  return superflo1.totalSupply
 }
 `

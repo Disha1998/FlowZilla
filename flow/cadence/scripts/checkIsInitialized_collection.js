@@ -11,10 +11,10 @@ import * as fcl from "@onflow/fcl";
 
 export const checkIsInitialized = `
 
-import SuperFlo from 0xa5a0ef4be9f25990
+import superflo1 from 0x4afc162bce5d7fb4
 
 pub fun main(account: Address): Bool {
-    let capability = getAccount(account).getCapability<&SuperFlo.Collection{SuperFlo.CollectionPublic}>(/public/SuperCoolCollection)
+    let capability = getAccount(account).getCapability<&superflo1.Collection{superflo1.CollectionPublic}>(/public/SuperCoolCollection)
     return capability.check()
 }
 `;

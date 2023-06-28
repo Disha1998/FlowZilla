@@ -1,7 +1,7 @@
 // NOTE: I deployed this to 0x02 in the playground
 import NonFungibleToken from 0x631e88ae7f1d7c20 // Document
 
-pub contract SuperFlo: NonFungibleToken {
+pub contract superflo1: NonFungibleToken {
 
   pub var totalSupply: UInt64
 
@@ -15,8 +15,8 @@ pub contract SuperFlo: NonFungibleToken {
     pub var metadata: {String: String}
 
     init(_ipfsHash: String, _metadata: {String: String}) {
-      self.id = SuperFlo.totalSupply
-      SuperFlo.totalSupply = SuperFlo.totalSupply + 1
+      self.id = superflo1.totalSupply
+      superflo1.totalSupply = superflo1.totalSupply + 1
 
       self.ipfsHash = _ipfsHash
       self.metadata = _metadata
@@ -24,7 +24,7 @@ pub contract SuperFlo: NonFungibleToken {
   }
 
   pub resource interface CollectionPublic {
-    pub fun borrowEntireNFT(id: UInt64): &SuperFlo.NFT
+    pub fun borrowEntireNFT(id: UInt64): &superflo1.NFT
   }
 
   pub resource Collection: NonFungibleToken.Receiver, NonFungibleToken.Provider, NonFungibleToken.CollectionPublic, CollectionPublic {
@@ -32,7 +32,7 @@ pub contract SuperFlo: NonFungibleToken {
     pub var ownedNFTs: @{UInt64: NonFungibleToken.NFT}
 
     pub fun deposit(token: @NonFungibleToken.NFT) {
-      let myToken <- token as! @SuperFlo.NFT
+      let myToken <- token as! @superflo1.NFT
       emit Deposit(id: myToken.id, to: self.owner?.address)
       self.ownedNFTs[myToken.id] <-! myToken
     }
@@ -52,9 +52,9 @@ pub contract SuperFlo: NonFungibleToken {
     }
 
   
-    pub fun borrowEntireNFT(id: UInt64): &SuperFlo.NFT {
+    pub fun borrowEntireNFT(id: UInt64): &superflo1.NFT {
       let reference = (&self.ownedNFTs[id] as auth &NonFungibleToken.NFT?)!
-      return reference as! &SuperFlo.NFT
+      return reference as! &superflo1.NFT
     }
 
     init() {
@@ -70,7 +70,7 @@ pub contract SuperFlo: NonFungibleToken {
     return <- create Collection()
   }
 
-  pub fun createToken(ipfsHash: String, metadata: {String: String}): @SuperFlo.NFT {
+  pub fun createToken(ipfsHash: String, metadata: {String: String}): @superflo1.NFT {
     return <- create NFT(_ipfsHash: ipfsHash, _metadata: metadata)
   }
 

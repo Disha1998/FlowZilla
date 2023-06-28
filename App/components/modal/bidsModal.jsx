@@ -6,32 +6,90 @@ import { useRouter } from 'next/router';
 import { ethers } from "ethers";
 import { CircularProgress } from "@mui/material";
 import { SUPER_COOL_NFT_CONTRACT, abi } from "../../constant/constant";
+import { purchaseTx } from "../../../flow/cadence/transactions/purchase";
+import { setupUserTx } from "../../../flow/cadence/transactions/setup_user";
+
+import * as fcl from "@onflow/fcl";
+import * as t from "@onflow/types";
 const BidsModal = () => {
   const { bidsModal } = useSelector((state) => state.counter);
   const dispatch = useDispatch();
   const superCoolContext = React.useContext(SupercoolAuthContext);
-  const { allNFTSForSell } = superCoolContext;
+  const { allNFTSForSell, updateForPurchase, getUserNFTs, isInitialized, user } = superCoolContext;
   const [buyLoading, setBuyLoading] = useState(false);
 
-  const purchaseNft = async (_tokenId, _price) => {
-    setBuyLoading(true);
-    const provider = new ethers.providers.Web3Provider(window.ethereum);
-    const signer = provider.getSigner();
+  // const purchaseNft = async (_tokenId, _price) => {
+  //   setBuyLoading(true);
+  //   const provider = new ethers.providers.Web3Provider(window.ethereum);
+  //   const signer = provider.getSigner();
 
-    const contract = new ethers.Contract(
-      SUPER_COOL_NFT_CONTRACT,
-      abi,
-      signer
-    );
-    try {
-      const tx = await contract.buyToken(_tokenId, { value: ethers.utils.parseUnits(_price.toString(), "ether") });
-      await tx.wait();
+  //   const contract = new ethers.Contract(
+  //     SUPER_COOL_NFT_CONTRACT,
+  //     abi,
+  //     signer
+  //   );
+  //   try {
+  //     const tx = await contract.buyToken(_tokenId, { value: ethers.utils.parseUnits(_price.toString(), "ether") });
+  //     await tx.wait();
 
-    } catch (error) {
-      console.error(error);
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  //   setBuyLoading(false);
+  // }
+
+  const setupUser = async () => {
+    const transactionId = await fcl
+  .send([
+    fcl.transaction(setupUserTx),
+    fcl.args([]),
+    fcl.payer(fcl.authz),
+    fcl.proposer(fcl.authz),
+    fcl.authorizations([fcl.authz]),
+    fcl.limit(9999),
+  ])
+  .then(fcl.decode);
+console.log(transactionId);
+await fcl.tx(transactionId).onceSealed();
+};
+
+  const purchaseNft = async (_owner, _id) => {
+    // console.log('user and id---', user?.addr, _id);
+
+    if (!isInitialized) {
+      console.log('is initializes val in purchase',isInitialized);
+    await setupUser();
     }
-    setBuyLoading(false);
+    try {
+      const transactionId = await fcl.send([
+
+        fcl.transaction(purchaseTx),
+        fcl.args([
+          fcl.arg(_owner, t.Address),
+          fcl.arg(parseInt(_id), t.UInt64)
+        ]),
+        fcl.payer(fcl.authz),
+        fcl.proposer(fcl.authz),
+        fcl.authorizations([fcl.authz]),
+        fcl.limit(9999)
+      ]).then(fcl.decode);
+
+      console.log(transactionId);
+      const transactionStatus = await fcl.tx(transactionId).onceSealed();
+
+      if (transactionStatus.status === 4) {
+        console.log("Purchase succeeded!");
+        await updateForPurchase(_id);
+        user && (await getUserNFTs());
+
+      } else {
+        console.log("Transaction failed:", transactionStatus.errorMessage);
+      }
+    } catch (error) {
+      console.log(error);
+    }
   }
+
 
   const router = useRouter();
   const pid = router.query.item;
@@ -112,7 +170,7 @@ const BidsModal = () => {
                             <CircularProgress />
                             :
                             <button
-                              onClick={() => purchaseNft(item.tokenId, item.price)}
+                              onClick={() => purchaseNft(item.owner,item.id)}
                               type="button"
                               className="text-accent shadow-white-volume hover:bg-accent-dark hover:shadow-accent-volume w-36 rounded-full bg-white py-3 px-8 text-center font-semibold transition-all hover:text-white"
                             >

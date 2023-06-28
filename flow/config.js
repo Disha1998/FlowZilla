@@ -3,7 +3,7 @@ import * as types from "@onflow/types";
 
 fcl
   .config()
-  .put("app.detail.title", "SuperFlo")
+  .put("app.detail.title", "superflo1")
   .put(
     "app.detail.icon",
     "https://assets-global.website-files.com/5f734f4dbd95382f4fdfa0ea/6395e6749db8fe00a41cc279_flow-flow-logo.svg"
