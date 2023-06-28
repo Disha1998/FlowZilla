@@ -60,7 +60,7 @@ export const SupercoolAuthContextProvider = (props) => {
         fcl.arg(account, t.Address)
       ])
     ]).then(fcl.decode);
-    console.log('result==>', isInit);
+    // console.log('result==>', isInit);
     setIsInitialized(isInit);
   }
 
@@ -86,9 +86,11 @@ export const SupercoolAuthContextProvider = (props) => {
       fcl.script(getTotalTokenSupply),
       fcl.args([])
     ]).then(fcl.decode);
-    console.log('total supply', result);
-    return result;
+    console.log('total supply', result - 1);
+    let id = result - 1;
+    return id;
   }
+  // getTotalSupply()
   const firebaseConfig = {
     apiKey: "AIzaSyCGVjsvfInkjCDotvdP6kY_TWdpyvz7uCo",
     authDomain: "superflow-f2e91.firebaseapp.com",
@@ -105,7 +107,7 @@ export const SupercoolAuthContextProvider = (props) => {
   const storage = getStorage(app);
 
   const NFTcollectionRef = collection(db, "CreatedNFTsTokenUri");
-  const SellNFTcollectionRef = collection(db, "SellNFTData");
+  const UserProfileRef = collection(db, "UserProfile");
 
 
 
@@ -116,6 +118,14 @@ export const SupercoolAuthContextProvider = (props) => {
     addDoc(NFTcollectionRef, newData);
     console.log("Data stored! Doc");
   }
+
+  // async function storeUserProfile(profileData) {
+  //   addDoc(UserProfileRef,profileData);
+  //   console.log("Profile stored!!");
+  // }
+
+
+
 
   const updateForSale = async (item) => {
     const q = query(
@@ -180,11 +190,6 @@ export const SupercoolAuthContextProvider = (props) => {
 
 
 
-  // async function storeSellNftOnFirebase(_id, _item) {
-  //   const newData = { ..._item, id: _id }
-  //   const docRef = await addDoc(SellNFTcollectionRef, newData);
-  //   console.log("Sell NFT Stored", docRef.id);
-  // }
 
   async function getUserNFTs() {
     try {
@@ -197,16 +202,16 @@ export const SupercoolAuthContextProvider = (props) => {
 
       for (let i = 0; i < data.length; i++) {
         let item = data[i];
-       let owner = item.owner;
+       var owner = item?.owner;
        let addr = user?.addr
        let forSale = item.forSale;
 
-       if(forSale == true){
+       if(forSale === true){
         allNftsForSell.push(item)
-        if(owner = addr){
+        if(owner == addr){
         myNftsForSell.push(item)
         }
-       }else if(owner = addr && forSale == false){
+       }else if(owner == addr && forSale == false){
         myNfts.push(item)
        }
        
@@ -225,45 +230,7 @@ export const SupercoolAuthContextProvider = (props) => {
     }
   }
 
-  // async function getUserSaleNFTs() {
-  //   try {
-  //     const querySnapshot = await getDocs(SellNFTcollectionRef);
-  //     const data = querySnapshot.docs.map((doc) => doc.data());
-  //     // console.log('sell nft data',data);
-  //     const allForSell = [];
-  //     const allNFTForSellCurrentUser = [];
 
-  //     for (let i = 0; i < data.length; i++) {
-  //       let dataa = data[i].data;
-  //       allForSell.push(dataa);
-  //       if (dataa.owner == user?.addr) {
-  //         allNFTForSellCurrentUser.push(dataa);
-  //       }
-  //     }
-  //     console.log('current users sell nftss--',allNFTForSellCurrentUser);
-  //     console.log('All sell nftss--',allForSell);
-
-  //     setAllNFTsForSell(allForSell);
-  //     setAllNFTsOfCurrentUserForSell(allNFTForSellCurrentUser);
-  //   } catch (error) {
-  //     console.error("Error fetching data: ", error);
-  //     return [];
-  //   }
-  // }
-
-
-  async function storeUserProfile(profileData) {
-    // const firestore = getFirestore();
-    const collectionName = "userProfiles";
-    const documentRef = doc(collection(firestore, collectionName), user?.addr);
-
-    try {
-      await setDoc(documentRef, profileData);
-      console.log("User profile data stored successfully!");
-    } catch (error) {
-      console.error("Error storing user profile data: ", error);
-    }
-  }
 
 
 
@@ -344,13 +311,6 @@ export const SupercoolAuthContextProvider = (props) => {
 
   // Edit profile
 
-  const uploadDatainIpfs = async (e) => {
-    let dataStringify = JSON.stringify(e);
-    const ipfsResult = await client.add(dataStringify);
-    const contentUri = `https://superfun.infura-ipfs.io/ipfs/${ipfsResult.path}`;
-    console.log("contentUri", contentUri);
-    return contentUri;
-  };
 
   const generateText = async (detailPrompt) => {
     try {
@@ -387,7 +347,6 @@ export const SupercoolAuthContextProvider = (props) => {
         prompt,
         setPrompt,
         user,
-        uploadDatainIpfs,
         getUserNFTs,
         generateText,
         getTotalSupply,
@@ -396,14 +355,15 @@ export const SupercoolAuthContextProvider = (props) => {
         isInitialized,
         checkInit,
         currentUserCreatedNFT,
-        storeUserProfile,
         allNftsOfCurrentUserForSell,
         refresh,
         setRefresh,
         updateForSale,
         myNFTs,
         myNFTsForSell,
-        allNFTSForSell
+        allNFTSForSell,
+        UserProfileRef,
+        db
       }}
       {...props}
     >

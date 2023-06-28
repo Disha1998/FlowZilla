@@ -9,7 +9,7 @@ import * as t from "@onflow/types";
 const likes = 54;
 const CategoryItem = ({ data }) => {
   const superCoolContext = React.useContext(SupercoolAuthContext);
-  const { storeSellNftOnFirebase , updateForSale} = superCoolContext;
+  const { storeSellNftOnFirebase , updateForSale,user,getUserNFTs} = superCoolContext;
 
   const listForSale = async (_id,_price,_item) => {
     try {
@@ -30,8 +30,9 @@ const CategoryItem = ({ data }) => {
 
       if (transactionStatus.status === 4) {
         console.log("Transaction succeeded!");
-        await storeSellNftOnFirebase(_id, _item);
         await updateForSale(_item);
+    user && (await getUserNFTs());
+
       } else {
         console.log("Transaction failed:", transactionStatus.errorMessage);
       }

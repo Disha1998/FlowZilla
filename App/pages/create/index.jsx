@@ -180,7 +180,7 @@ const Create = () => {
       console.log("Error: ", error);
     setMintLoading(false);
     }
-    
+
     user && (await getUserNFTs());
     setLoading(!loading);
     setMintLoading(false);
