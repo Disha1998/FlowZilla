@@ -1,19 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import Tippy from '@tippyjs/react';
-import CopyToClipboard from 'react-copy-to-clipboard';
-import Image from 'next/image';
-import UserId from '../../components/userId';
-import Head from 'next/head';
 import Meta from '../../components/Meta';
-import { ethers, Signer } from 'ethers';
 import { SupercoolAuthContext } from '../../context/supercoolContext';
-import axios from 'axios';
-import localforage from 'localforage'
+import { addDoc, collection, doc, getDocs, query, updateDoc, where } from 'firebase/firestore';
 
 import { abi, SUPER_COOL_NFT_CONTRACT } from '../../constant/constant';
 const Edit_user = () => {
 	const superCoolContext = React.useContext(SupercoolAuthContext);
-	const { storeUserProfile, handleImgUpload, getProfileData,user } = superCoolContext;
+	const { handleImgUpload, getProfileData, user, UserProfileRef, db } = superCoolContext;
 	const [coverePhoto, setCoverePhoto] = useState();
 	const [username, setUsername] = useState("");
 	const [bio, setBio] = useState("");
@@ -28,31 +21,64 @@ const Edit_user = () => {
 		walletAddress: user?.addr
 	}
 
+	async function storeUserProfile() {
+		const q = query(
+			collection(db, "UserProfile"),
+			where("walletAddress", "==", user?.addr)
+		);
+
+		const querySnapshot = await getDocs(q);
+
+		if (querySnapshot.empty) {
+			addDoc(UserProfileRef, Profiledata);
+			console.log("Profile stored!!");
+		} else {
+			querySnapshot.forEach((fire) => {
+				const data = {
+					username:
+						Profiledata.username !== ""
+							? Profiledata.username
+							: fire.data().username,
+
+					bio:
+						Profiledata.bio !== ""
+							? Profiledata.bio
+							: fire.data().bio,
+
+					profilephoto:
+						Profiledata.profilephoto !== undefined
+							? Profiledata.profilephoto
+							: fire.data().profilephoto,
+
+					coverimage:
+						Profiledata.coverimage !== undefined
+							? Profiledata.coverimage
+							: fire.data().coverimage,
+
+					walletAddress:
+						Profiledata.walletAddress
+				};
+				const dataref = doc(db, "UserProfile", fire.id);
+				updateDoc(dataref, data);
+				console.log("Profile updated!!");
+
+			})
+		}
+
+	}
+
 	useEffect(() => {
-		if (user?.addr !== undefined) {
-			// editProfileData();
+		if (user?.addr) {
+			getEditProfileData();
 		}
 	}, [user?.addr])
 
-	let provider;
-	let signer;
-	if (typeof window !== "undefined") {
-		provider = new ethers.providers.Web3Provider(window.ethereum);
-		signer = provider.getSigner();
-	}
-
-	const contract = new ethers.Contract(
-		SUPER_COOL_NFT_CONTRACT,
-		abi,
-		signer
-	);
-	console.log('Profiledata=', Profiledata);
+	// console.log('Profiledata=', Profiledata);
 
 	const UsernameEvent = (e) => {
 		setUsername(e.target.value)
 	}
 	const BioEvent = (e) => {
-		console.log(e);
 		setBio(e.target.value)
 	}
 	const handleCoverPhoto = async (event) => {
@@ -65,35 +91,47 @@ const Edit_user = () => {
 		setProfilePhoto(pfpImg)
 	}
 
-	const editProfileData = async () => {
+	const getEditProfileData = async () => {
+		try {
+			const q = query(
+				collection(db, "UserProfile"),
+				where("walletAddress", "==", user?.addr)
+			);
+			const querySnapshot = await getDocs(q);
 
-		// localforage.getItem('address').then(async (value) => {
-			const response = await getProfileData(value);
-			console.log(response);
-			setUsername(response.data.username)
-			setBio(response.data.bio)
-			setCoverePhoto(response.data.coverimage);
-			setProfilePhoto(response.data.profilephoto)
-		// })
+			
+		if (querySnapshot.empty) {
+			console.log(" create profile!!");
+		} else {
+			const data = querySnapshot.docs.map((doc) => doc.data());
+			console.log(data);
+			setUsername(data[0].username)
+			setBio(data[0].bio)
+			setCoverePhoto(data[0].coverimage);
+			setProfilePhoto(data[0].profilephoto)
+		}
+		} catch (error) {
+			console.error("Error fetching user profile: ", error);
+		}
 	}
 
 	const updateProfile = async () => {
 		console.log(Profiledata);
-		await storeUserProfile(Profiledata)
+		await storeUserProfile()
 	}
 	// console.log('Data', Data);
 
 
-	const uploadImageToIPFS = async (imageData) => {
-		try {
-			const uploadedImage = await ipfs.add(imageData);
-			const imageHash = uploadedImage.cid.toString();
-			return imageHash;
-		} catch (error) {
-			console.error('Error uploading image to IPFS:', error);
-			return null;
-		}
-	};
+	// const uploadImageToIPFS = async (imageData) => {
+	// 	try {
+	// 		const uploadedImage = await ipfs.add(imageData);
+	// 		const imageHash = uploadedImage.cid.toString();
+	// 		return imageHash;
+	// 	} catch (error) {
+	// 		console.error('Error uploading image to IPFS:', error);
+	// 		return null;
+	// 	}
+	// };
 
 
 	return (

@@ -24,8 +24,8 @@
         "testnet": "0x631e88ae7f1d7c20"
       }
     },
-    "SuperFlo": "./flow/cadence/contracts/SuperCool.cdc",
-    "SeperNFTMarketplace": "./flow/cadence/contracts/NFTMarketplace.cdc"
+    "superflo1": "./flow/cadence/contracts/SuperCool.cdc",
+    "supermarketplace1": "./flow/cadence/contracts/NFTMarketplace.cdc"
   },
   "networks": {
     "emulator": "127.0.0.1:3569",
@@ -38,19 +38,19 @@
       "key": "d4aa3ee06587d5be831c0f563f7c9fb6da9758429d899985321cc45d78b12f57"
     },
     "testnet-account": {
-      "address": "0xa5a0ef4be9f25990",
+      "address": "0x4afc162bce5d7fb4",
       "key": {
         "type": "hex",
         "index": 0,
         "signatureAlgorithm": "ECDSA_P256",
         "hashAlgorithm": "SHA3_256",
-        "privateKey": "4f37ea207ea4a875df957b194d7b52e57d2cb996d675169ddeb0dfa2453ed076"
+        "privateKey": "341c91dfac7046b9ee986a1dc851a86ee3c1c5ef4a3cd2158c31985625fb7e99"
       }                 
     }
   },
   "deployments": {
     "testnet": {
-      "testnet-account": ["SeperNFTMarketplace"]
+      "testnet-account": ["supermarketplace1"]
     }
   }
 }

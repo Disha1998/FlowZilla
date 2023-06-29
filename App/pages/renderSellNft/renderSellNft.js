@@ -8,6 +8,10 @@ const RendersellNft = ({ rendersellNFT, setTitle, setDescription, setPrice, crea
             id: 1,
             text: 'Flow',
         },
+        {
+            id: 2,
+            text: 'Polygon',
+        },
         // {
         //     id: 2,
         //     text: 'flow',

@@ -1,18 +1,18 @@
 export const purchaseTx = `
-import SuperFlo from 0xa5a0ef4be9f25990
+import superflo1 from 0x4afc162bce5d7fb4
 import NonFungibleToken from 0x631e88ae7f1d7c20
-import SeperNFTMarketplace from 0xa5a0ef4be9f25990
+import supermarketplace1 from 0x4afc162bce5d7fb4
 import FlowToken from 0x7e60df042a9c0868
 
 transaction(account: Address, id: UInt64) {
 
   prepare(acct: AuthAccount) {
     let saleCollection = getAccount(account).getCapability(/public/MySaleCollection)
-                        .borrow<&SeperNFTMarketplace.SaleCollection{SeperNFTMarketplace.SaleCollectionPublic}>()
+                        .borrow<&supermarketplace1.SaleCollection{supermarketplace1.SaleCollectionPublic}>()
                         ?? panic("Could not borrow the user's SaleCollection")
 
     let recipientCollection = getAccount(acct.address).getCapability(/public/SuperCoolCollection) 
-                    .borrow<&SuperFlo.Collection{NonFungibleToken.CollectionPublic}>()
+                    .borrow<&superflo1.Collection{NonFungibleToken.CollectionPublic}>()
                     ?? panic("Can't get the User's collection.")
 
     let price = saleCollection.getPrice(id: id)

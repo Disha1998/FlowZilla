@@ -239,10 +239,8 @@ const Create = () => {
     setMintLoading(true);
     let metadataurl = await uploadOnIpfs(nftData);
     if (!isInitialized) {
-      console.log('is initializes val in create', isInitialized);
-      await setupUser();
-      await storeNftOnFirebase(metadataurl);
-
+      console.log('is initializes val in create',isInitialized);
+    await setupUser();
     }
     console.log('metadataurl', metadataurl);
     mintNft(ethers.utils.parseUnits(price?.toString(), "ether"), metadataurl, nftData);

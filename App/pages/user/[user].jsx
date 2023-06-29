@@ -4,19 +4,24 @@ import Tippy from "@tippyjs/react";
 import "tippy.js/dist/tippy.css"; // optional
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import { SupercoolAuthContext } from "../../context/supercoolContext";
-
+import { addDoc, collection, doc, getDocs, query, updateDoc, where } from 'firebase/firestore';
+import { flowimg } from "../../public/images/flow-icon.png"
 
 const User = () => {
 
-  const [address, setAddress] = useState();
   const [coverePhoto, setCoverePhoto] = useState();
   const [username, setUsername] = useState();
   const [bio, setBio] = useState("");
   const [profilePhoto, setProfilePhoto] = useState();
   const [copied, setCopied] = useState(false);
   const superCoolContext = React.useContext(SupercoolAuthContext);
-  const { allNfts, getProfileData } = superCoolContext;
+  const { allNfts, user, db } = superCoolContext;
 
+  useEffect(() => {
+    if (user?.addr) {
+      getProfileData();
+    }
+  }, [user?.addr])
 
   useEffect(() => {
     setTimeout(() => {
@@ -24,9 +29,35 @@ const User = () => {
     }, 2000);
   }, [copied]);
 
+  const getProfileData = async () => {
+    try {
+      const q = query(
+        collection(db, "UserProfile"),
+        where("walletAddress", "==", user?.addr)
+      );
+      const querySnapshot = await getDocs(q);
+
+      
+		if (querySnapshot.empty) {
+			console.log("First create profile!!");
+		} else {
+      const data = querySnapshot.docs.map((doc) => doc.data());
+      console.log(data);
+      setUsername(data[0].username)
+      setBio(data[0].bio)
+      setCoverePhoto(data[0].coverimage);
+      setProfilePhoto(data[0].profilephoto)
+    }
+     
+    } catch (error) {
+      console.error("Error fetching user profile: ", error);
+    }
+  }
+
 
   return (
     <>
+
       <div className="pt-[5.5rem] lg:pt-24" >
         {/* <!-- Banner --> */}
         <div className="relative h-[18.75rem]">
@@ -38,6 +69,7 @@ const User = () => {
 
           />
         </div>
+       
         {/* <!-- end banner --> */}
         <section className="dark:bg-jacarta-800 bg-light-base relative pb-12 pt-28">
           {/* <!-- Avatar --> */}
@@ -53,10 +85,10 @@ const User = () => {
 
             </figure>
           </div>
-
+         
           <div className="container">
             <div className="text-center">
-              <h4 className="font-display text-jacarta-700 mb-2 text-2xl font-medium dark:text-white">
+              <h4 className="font-display text-jacarta-700 mt-3 mb-2 text-2xl font-medium dark:text-white">
                 {username ? username : "user"}
               </h4>
               <div className="dark:bg-jacarta-700 dark:border-jacarta-600 border-jacarta-100 mb-8 inline-flex items-center justify-center rounded-full border bg-white py-1.5 px-4">
@@ -78,10 +110,10 @@ const User = () => {
                 >
                   <button className="js-copy-clipboard dark:text-jacarta-200 max-w-[10rem] select-none overflow-hidden text-ellipsis whitespace-nowrap">
                     <CopyToClipboard
-                      text={address}
+                      text={user?.addr}
                       onCopy={() => setCopied(true)}
                     >
-                      <span>{address}</span>
+                      <span>{user?.addr}</span>
                     </CopyToClipboard>
                   </button>
                 </Tippy>
