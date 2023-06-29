@@ -44,6 +44,7 @@ const Create = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const [generateLoading, setGenerateLoading] = useState(false);
   const [mintLoading, setMintLoading] = useState(false);
+  const [result, setResult] = useState("");
 
   const imgRef = useRef();
   const [placeholder, setPlaceholder] = useState(
@@ -65,6 +66,7 @@ const Create = () => {
   const configuration = new Configuration({
     apiKey: process.env.apiKey,
   });
+
   const openai = new OpenAIApi(configuration);
 
   const NFT_STORAGE_TOKEN =
@@ -111,9 +113,7 @@ const Create = () => {
 
   const generateImage = async () => {
     setPlaceholder(`Search ${prompt}..`);
-    setGenerateLoading(true);
-    setPlaceholder(`Search ${prompt}...`);
-
+    setLoading(true);
 
     try {
       const res = await openai.createImage({
@@ -121,53 +121,54 @@ const Create = () => {
         n: 1,
         size: "256x256",
       });
-      // console.log(res.data.data[0].url);
+      setLoading(false);
+      setResult(res.data.data[0].url);
+      console.log('res', res);
+      let arry = [];
+      for (let i = 0; i < res.data.data.length; i++) {
+        const img_url = res.data.data[i].url;
+        console.log("img_url", img_url);
+        const api = await axios.create({
+          baseURL: "https://open-ai-enwn.onrender.com",
+        });
+        const obj = {
+          url: img_url,
+        };
+        let response = await api
+          .post("/image", obj)
+          .then((res) => {
+            return res;
+          })
+          .catch((error) => {
+            console.log(error, '----<>');
+          });
+        const arr = new Uint8Array(response.data.data);
+        const blob = new Blob([arr], { type: "image/jpeg" });
+        const imageFile = new File([blob], `data.png`, {
+          type: "image/jpeg",
+        });
+        const metadata = await client.store({
+          name: "data",
+          description: "data",
+          image: imageFile,
+        });
+        const imUrl = `https://ipfs.io/ipfs/${metadata.ipnft}/metadata.json`;
 
-  let arry = [];
-  for (let i = 0; i < res.data.data.length; i++) {
-    const img_url = res.data.data[i].url;
-    console.log("img_url", img_url);
-    const api = await axios.create({
-      baseURL: "https://open-ai-enwn.onrender.com",
-    });
-    const obj = {
-      url: img_url,
-    };
-    let response = await api
-      .post("/image", obj)
-      .then((res) => {
-        return res;
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-      // console.log(response);
-    const arr = new Uint8Array(response.data.data);
-    const blob = new Blob([arr], { type: "image/jpeg" });
-    const imageFile = new File([blob], `data.png`, {
-      type: "image/jpeg",
-    });
-    console.log(imageFile,'img fileeee');
-    const metadata = await client.store({
-      name: "data",
-      description: "data",
-      image: imageFile,
-    });
-    const imUrl = `https://nftstorage.link/ipfs/${metadata.ipnft}/metadata.json`;
-    console.log(imUrl, "imUrl");
-    const data = (await axios.get(imUrl)).data;
-    console.log(data.image, "data");
-    const rep = data.image.replace(
-      "ipfs://",
-      "https://nftstorage.link/ipfs/"
-    );
-    console.log(rep, "==rep");
+        // const imUrl = `https://nftstorage.link/ipfs/${metadata.ipnft}/metadata.json`;
+        console.log(imUrl, "imUrl");
+        const data = (await axios.get(imUrl)).data;
+        console.log(data.image, "data");
+        const rep = data.image.replace(
+          "ipfs://",
+          "https://ipfs.io/ipfs/"
+        );
+        console.log(rep, "==rep");
 
-    arry.push(rep);
-  }
-  console.log(arry, "----arry");
+        arry.push(rep);
+      }
+      console.log(arry, "----arry");
 
-  setImages(arry);
+      setImages(arry);
       setGenerateLoading(false);
     } catch (error) {
       console.error(`Error generating image: ${error}`);
@@ -292,7 +293,7 @@ const Create = () => {
                     <p className="dark:text-jacarta-300 text-4xs mb-3">
                       We're excited to bring your NFT to life, but we need your
                       input. Please provide us with a brief description of what
-                      you want it to look like. Or
+                      you want it to look like.
                       {/* <span>
                         <a
                           className="hover:text-accent dark:hover:text-white text-jacarta-700 font-bold font-display mb-6 text-center text-md dark:text-white md:text-left lg:text-md xl:text-md animate-gradient"
