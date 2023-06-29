@@ -57,11 +57,9 @@ const Create = () => {
   useEffect(() => {
     if (isMounted && imageUrl) {
       imgRef.current = imageUrl;
-      console.log("imgRef==", imgRef);
     }
   }, [imageUrl, isMounted]);
 
-  // console.log('opena ai api key', process.env.apiKey);
   const configuration = new Configuration({
     apiKey: process.env.apiKey,
   });
@@ -102,11 +100,9 @@ const Create = () => {
       });
       setLoading(false);
       setResult(res.data.data[0].url);
-      console.log('res', res);
       let arry = [];
       for (let i = 0; i < res.data.data.length; i++) {
         const img_url = res.data.data[i].url;
-        console.log("img_url", img_url);
         const api = await axios.create({
           baseURL: "https://open-ai-enwn.onrender.com",
         });
@@ -133,20 +129,13 @@ const Create = () => {
         });
         const imUrl = `https://ipfs.io/ipfs/${metadata.ipnft}/metadata.json`;
 
-        // const imUrl = `https://nftstorage.link/ipfs/${metadata.ipnft}/metadata.json`;
-        console.log(imUrl, "imUrl");
         const data = (await axios.get(imUrl)).data;
-        console.log(data.image, "data");
         const rep = data.image.replace(
           "ipfs://",
           "https://ipfs.io/ipfs/"
         );
-        console.log(rep, "==rep");
-
         arry.push(rep);
       }
-      console.log(arry, "----arry");
-
       setImages(arry);
       setGenerateLoading(false);
       alert("Generated COOL 😎 images succesfully!!")
@@ -157,7 +146,6 @@ const Create = () => {
       setGenerateLoading(false);
     }
   };
-  // JD CORS Solution END -------------------
 
   const mintNft = async (_price, _metadataurl, _nftData) => {
     const ipfsHash = _metadataurl;
@@ -205,13 +193,6 @@ const Create = () => {
     setrendersellNFT(false);
   };
 
-  let provider;
-  let signer;
-  if (typeof window !== "undefined") {
-    provider = new ethers.providers.Web3Provider(window.ethereum);
-    signer = provider.getSigner();
-  }
-
 
   const nftData = {
     title: title,
@@ -224,16 +205,12 @@ const Create = () => {
     forSale: false
   };
   const createNft = async () => {
-    // console.log(nftData);
     setMintLoading(true);
     let metadataurl = await uploadOnIpfs(nftData);
     if (!isInitialized) {
-      console.log('is initializes val in create', isInitialized);
       await setupUser();
     }
-    console.log('metadataurl', metadataurl);
     mintNft(ethers.utils.parseUnits(price?.toString(), "ether"), metadataurl, nftData);
-
   };
 
   function handleSelectedImg(url) {
@@ -318,7 +295,6 @@ const Create = () => {
                     {images.length > 0 ? (
                       <>
                         <div className="row main-row">
-                          {console.log(images, "===images")}
                           {images &&
                             images.map((url) => (
                               <div

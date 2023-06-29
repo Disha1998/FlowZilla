@@ -19,26 +19,6 @@ const BidsModal = () => {
   const { allNFTSForSell, updateForPurchase, getUserNFTs, isInitialized, user, checkInit } = superCoolContext;
   const [buyLoading, setBuyLoading] = useState(false);
 
-  // const purchaseNft = async (_tokenId, _price) => {
-  //   setBuyLoading(true);
-  //   const provider = new ethers.providers.Web3Provider(window.ethereum);
-  //   const signer = provider.getSigner();
-
-  //   const contract = new ethers.Contract(
-  //     SUPER_COOL_NFT_CONTRACT,
-  //     abi,
-  //     signer
-  //   );
-  //   try {
-  //     const tx = await contract.buyToken(_tokenId, { value: ethers.utils.parseUnits(_price.toString(), "ether") });
-  //     await tx.wait();
-
-  //   } catch (error) {
-  //     console.error(error);
-  //   }
-  //   setBuyLoading(false);
-  // }
-
   const setupUser = async () => {
     const transactionId = await fcl
       .send([
@@ -56,8 +36,6 @@ const BidsModal = () => {
 
   const purchaseNft = async (_owner, _id) => {
     setBuyLoading(true);
-    // console.log('user and id---', user?.addr, _id);
-
     if (!isInitialized) {
       console.log('is initializes val in purchase', isInitialized);
       await setupUser();
@@ -106,7 +84,6 @@ const BidsModal = () => {
       {
         allNFTSForSell.filter((item) => item.id == pid)
           .map((item) => {
-            console.log(item);
             return (
               <div key={item.id} className={bidsModal ? "modal fade show block" : "modal fade"}>
                 <div className="modal-dialog max-w-2xl">
@@ -134,7 +111,6 @@ const BidsModal = () => {
                       </button>
                     </div>
 
-                    {/* <!-- Body --> */}
                     <div className="modal-body p-6">
                       <div className="mb-2 flex items-center justify-between">
                         <span className="font-display text-jacarta-700 text-sm font-semibold dark:text-white">
@@ -169,7 +145,6 @@ const BidsModal = () => {
                       </div>
 
                     </div>
-                    {/* <!-- end body --> */}
 
                     <div className="modal-footer">
                       <div className="flex items-center justify-center space-x-4">

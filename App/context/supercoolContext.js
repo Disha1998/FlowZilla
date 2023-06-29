@@ -48,12 +48,10 @@ export const SupercoolAuthContextProvider = (props) => {
     fcl.currentUser().subscribe(setUser);
     getUserNFTs();
   }, [user?.addr, refresh]);
-  // console.log(user.addr,'user addr');
 
 
   const checkInit = async () => {
     let account = user?.addr
-    console.log('address', account);
     const isInit = await fcl.send([
       fcl.script(checkIsInitialized),
       fcl.args([
@@ -86,7 +84,6 @@ export const SupercoolAuthContextProvider = (props) => {
       fcl.script(getTotalTokenSupply),
       fcl.args([])
     ]).then(fcl.decode);
-    // console.log('total supply', result - 1);
     let id = result - 1;
     return id;
   }
@@ -104,7 +101,6 @@ export const SupercoolAuthContextProvider = (props) => {
   // Initialize Firebase
   const app = initializeApp(firebaseConfig);
   const db = getFirestore(app);
-  const storage = getStorage(app);
 
   const NFTcollectionRef = collection(db, "CreatedNFTsTokenUri");
   const UserProfileRef = collection(db, "UserProfile");
@@ -113,18 +109,9 @@ export const SupercoolAuthContextProvider = (props) => {
 
   const storeNftOnFirebase = async (_item) => {
     let tokenid = await getTotalSupply();
-    console.log(tokenid);
     const newData = { ..._item, id: tokenid }
     addDoc(NFTcollectionRef, newData);
-    console.log("Data stored! Doc");
   }
-
-  // async function storeUserProfile(profileData) {
-  //   addDoc(UserProfileRef,profileData);
-  //   console.log("Profile stored!!");
-  // }
-
-
 
 
   const updateForSale = async (item) => {
@@ -134,15 +121,12 @@ export const SupercoolAuthContextProvider = (props) => {
     );
     const querySnapshot = await getDocs(q);
     querySnapshot.forEach((fire) => {
-      console.log(fire.data());
       const data = {
         forSale: true
       };
       const dataref = doc(db, "CreatedNFTsTokenUri", fire.id);
       updateDoc(dataref, data);
-      console.log(fire.data());
     })
-    console.log('done');
   }
 
   const updateForPurchase = async (id) => {
@@ -152,16 +136,13 @@ export const SupercoolAuthContextProvider = (props) => {
     );
     const querySnapshot = await getDocs(q);
     querySnapshot.forEach((fire) => {
-      console.log(fire.data());
       const data = {
         owner: user?.addr,
         forSale: false
       };
       const dataref = doc(db, "CreatedNFTsTokenUri", fire.id);
       updateDoc(dataref, data);
-      console.log(fire.data());
     })
-    console.log('done');
   }
 
   const GenerateNum = () => {
@@ -170,22 +151,10 @@ export const SupercoolAuthContextProvider = (props) => {
   };
 
 
-
-
-
-
-
-
-
-
-
-
-
   async function getUserNFTs() {
     try {
       const querySnapshot = await getDocs(NFTcollectionRef);
       const data = querySnapshot.docs.map((doc) => doc.data());
-      // console.log(data.length);
       let myNfts = [];
       let myNftsForSell = [];
       let allNftsForSell = [];
@@ -237,14 +206,12 @@ export const SupercoolAuthContextProvider = (props) => {
 
   // const getUserNFTs = async () => {
   //   let account = user?.addr
-  //   console.log(account);
   //   const result = await fcl.send([
   //     fcl.script(getNFTsScript),
   //     fcl.args([
   //       fcl.arg(account, t.Address)
   //     ])
   //   ]).then(fcl.decode);
-  //   console.log(result);
   // }
   //   let metadataa = []
   //   for (let i = 0; i < result.length; i++) {
@@ -268,7 +235,6 @@ export const SupercoolAuthContextProvider = (props) => {
   //     ])
   //   ]).then(fcl.decode);
 
-  //   console.log(result,"result");
   // }
 
   //   let metadataa = [];
@@ -288,7 +254,6 @@ export const SupercoolAuthContextProvider = (props) => {
     let dataStringify = JSON.stringify(e);
     const ipfsResult = await client.add(dataStringify);
     const contentUri = `https://superfun.infura-ipfs.io/ipfs/${ipfsResult.path}`;
-    console.log(contentUri);
     return contentUri;
   };
 
@@ -298,8 +263,6 @@ export const SupercoolAuthContextProvider = (props) => {
     const ipfsURL = `https://superfun.infura-ipfs.io/ipfs/${hash}`;
     return ipfsURL;
   };
-
-  // Edit profile
 
 
   const generateText = async (detailPrompt) => {
@@ -319,7 +282,6 @@ export const SupercoolAuthContextProvider = (props) => {
       );
       console.log(response.data.choices[0].text);
       setPrompt(response.data.choices[0].text);
-      // return response.data.choices[0].text;
     } catch (error) {
       console.error("Error:", error);
     }
@@ -340,7 +302,6 @@ export const SupercoolAuthContextProvider = (props) => {
         generateText,
         getTotalSupply,
         storeNftOnFirebase,
-        // storeSellNftOnFirebase,
         isInitialized,
         checkInit,
         currentUserCreatedNFT,

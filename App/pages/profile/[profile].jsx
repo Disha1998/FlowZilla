@@ -73,7 +73,6 @@ const Edit_user = () => {
 		}
 	}, [user?.addr])
 
-	// console.log('Profiledata=', Profiledata);
 
 	const UsernameEvent = (e) => {
 		setUsername(e.target.value)
@@ -99,40 +98,24 @@ const Edit_user = () => {
 			);
 			const querySnapshot = await getDocs(q);
 
-			
-		if (querySnapshot.empty) {
-			console.log(" create profile!!");
-		} else {
-			const data = querySnapshot.docs.map((doc) => doc.data());
-			console.log(data);
-			setUsername(data[0].username)
-			setBio(data[0].bio)
-			setCoverePhoto(data[0].coverimage);
-			setProfilePhoto(data[0].profilephoto)
-		}
+
+			if (querySnapshot.empty) {
+				console.log(" create profile!!");
+			} else {
+				const data = querySnapshot.docs.map((doc) => doc.data());
+				setUsername(data[0].username)
+				setBio(data[0].bio)
+				setCoverePhoto(data[0].coverimage);
+				setProfilePhoto(data[0].profilephoto)
+			}
 		} catch (error) {
 			console.error("Error fetching user profile: ", error);
 		}
 	}
 
 	const updateProfile = async () => {
-		console.log(Profiledata);
 		await storeUserProfile()
 	}
-	// console.log('Data', Data);
-
-
-	// const uploadImageToIPFS = async (imageData) => {
-	// 	try {
-	// 		const uploadedImage = await ipfs.add(imageData);
-	// 		const imageHash = uploadedImage.cid.toString();
-	// 		return imageHash;
-	// 	} catch (error) {
-	// 		console.error('Error uploading image to IPFS:', error);
-	// 		return null;
-	// 	}
-	// };
-
 
 	return (
 		<div>
@@ -220,12 +203,7 @@ const Edit_user = () => {
 										required
 										value={user?.addr}
 										disabled
-									// onChange={UsernameEvent}
 									/>
-									{/* <UserId
-										classes="js-copy-clipboard dark:bg-jacarta-700 border-jacarta-100 hover:bg-jacarta-50 dark:border-jacarta-600 dark:text-jacarta-300 flex w-full select-none items-center rounded-lg border bg-white py-3 px-4"
-									userId={localStorage.getItem('address').slice(0, 34)}
-									/> */}
 								</div>
 								<button className="bg-accent shadow-accent-volume hover:bg-accent-dark rounded-full py-3 px-8 text-center font-semibold text-white transition-all"
 									onClick={updateProfile}
@@ -279,7 +257,6 @@ const Edit_user = () => {
 						</div>
 					</div>
 				</section>
-				{/* <!-- end edit profile --> */}
 			</div>
 		</div>
 	);
