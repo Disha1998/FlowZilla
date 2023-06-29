@@ -88,68 +88,6 @@ const Create = () => {
     await fcl.tx(transactionId).onceSealed();
   };
 
-  // const generateImage = async () => {
-  //   setGenerateLoading(true);
-  //   setPlaceholder(`Search ${prompt}...`);
-  //   try {
-  //     const res = await openai.createImage({
-  //       prompt: prompt,
-  //       n: 1,
-  //       size: "256X256",
-  //     });
-  //     console.log(res);
-
-  //     let arry = [];
-  //     for (let i = 0; i < res.data.data.length; i++) {
-  //       const img_url = res.data.data[i].url;
-  //       console.log("img_url", img_url);
-  //       const api = await axios.create({
-  //         baseURL: "https://open-ai-enwn.onrender.com",
-  //       });
-  //       const obj = {
-  //         url: img_url,
-  //       };
-  //       let response = await api
-  //         .post("/image", obj)
-  //         .then((res) => {
-  //           return res;
-  //         })
-  //         .catch((error) => {
-  //           console.log(error,'----<>');
-  //         });
-  //       const arr = new Uint8Array(response.data.data);
-  //       const blob = new Blob([arr], { type: "image/jpeg" });
-  //       const imageFile = new File([blob], `data.png`, {
-  //         type: "image/jpeg",
-  //       });
-  //       const metadata = await client.store({
-  //         name: "data",
-  //         description: "data",
-  //         image: imageFile,
-  //       });
-  //       const imUrl = `https://nftstorage.link/ipfs/${metadata.ipnft}/metadata.json`;
-  //       console.log(imUrl, "imUrl");
-  //       const data = (await axios.get(imUrl)).data;
-  //       console.log(data.image, "data");
-  //       const rep = data.image.replace(
-  //         "ipfs://",
-  //         "https://nftstorage.link/ipfs/"
-  //       );
-  //       console.log(rep, "==rep");
-
-  //       arry.push(rep);
-  //     }
-  //     console.log(arry, "----arry");
-
-  //     setImages(arry);
-  //     setGenerateLoading(false);
-  //   } catch (error) {
-  //     console.error(`Error generating image: ${error}`);
-  //     setGenerateLoading(false);
-  //   }
-  // };
-  // JD CORS Solution END -------------------
-
   const generateImage = async () => {
     setPlaceholder(`Search ${prompt}..`);
     setLoading(true);
@@ -162,11 +100,81 @@ const Create = () => {
       });
       setLoading(false);
       setResult(res.data.data[0].url);
+      console.log('res', res);
+      let arry = [];
+      for (let i = 0; i < res.data.data.length; i++) {
+        const img_url = res.data.data[i].url;
+        console.log("img_url", img_url);
+        const api = await axios.create({
+          baseURL: "https://open-ai-enwn.onrender.com",
+        });
+        const obj = {
+          url: img_url,
+        };
+        let response = await api
+          .post("/image", obj)
+          .then((res) => {
+            return res;
+          })
+          .catch((error) => {
+            console.log(error, '----<>');
+          });
+        const arr = new Uint8Array(response.data.data);
+        const blob = new Blob([arr], { type: "image/jpeg" });
+        const imageFile = new File([blob], `data.png`, {
+          type: "image/jpeg",
+        });
+        const metadata = await client.store({
+          name: "data",
+          description: "data",
+          image: imageFile,
+        });
+        const imUrl = `https://ipfs.io/ipfs/${metadata.ipnft}/metadata.json`;
+
+        // const imUrl = `https://nftstorage.link/ipfs/${metadata.ipnft}/metadata.json`;
+        console.log(imUrl, "imUrl");
+        const data = (await axios.get(imUrl)).data;
+        console.log(data.image, "data");
+        const rep = data.image.replace(
+          "ipfs://",
+          "https://ipfs.io/ipfs/"
+        );
+        console.log(rep, "==rep");
+
+        arry.push(rep);
+      }
+      console.log(arry, "----arry");
+
+      setImages(arry);
+      setGenerateLoading(false);
     } catch (error) {
-      setLoading(false);
-      console.error(`Error generating image: ${error.response.data.error.message}`);
+      console.error(`Error generating image: ${error}`);
+      setGenerateLoading(false);
     }
   };
+  // JD CORS Solution END -------------------
+
+  // const generateImage = async () => {
+  //   setPlaceholder(`Search ${prompt}..`);
+  //   setLoading(true);
+
+  //   try {
+  //     const res = await openai.createImage({
+  //       prompt: prompt,
+  //       n: 1,
+  //       size: "256x256",
+  //     });
+  //     setLoading(false);
+  //     setResult(res.data.data[0].url);
+
+
+
+
+  //   } catch (error) {
+  //     setLoading(false);
+  //     console.error(`Error generating image: ${error.response.data.error.message}`);
+  //   }
+  // };
 
   console.log(result, '----');
 
@@ -239,8 +247,8 @@ const Create = () => {
     setMintLoading(true);
     let metadataurl = await uploadOnIpfs(nftData);
     if (!isInitialized) {
-      console.log('is initializes val in create',isInitialized);
-    await setupUser();
+      console.log('is initializes val in create', isInitialized);
+      await setupUser();
     }
     console.log('metadataurl', metadataurl);
     mintNft(ethers.utils.parseUnits(price?.toString(), "ether"), metadataurl, nftData);
@@ -288,7 +296,7 @@ const Create = () => {
                     <p className="dark:text-jacarta-300 text-4xs mb-3">
                       We're excited to bring your NFT to life, but we need your
                       input. Please provide us with a brief description of what
-                      you want it to look like. Or
+                      you want it to look like.
                       {/* <span>
                         <a
                           className="hover:text-accent dark:hover:text-white text-jacarta-700 font-bold font-display mb-6 text-center text-md dark:text-white md:text-left lg:text-md xl:text-md animate-gradient"

@@ -19,7 +19,6 @@ const Item = () => {
 	const pid = router.query.item;
 	const [imageModal, setImageModal] = useState(false);
 	const [currentPriceUSD, setCurrentPriceUSD] = useState();
-	const [maticToUSD, setMaticToUSD] = useState();
 	const superCoolContext = React.useContext(SupercoolAuthContext);
 	const { allNFTSForSell, allNfts } = superCoolContext;
 

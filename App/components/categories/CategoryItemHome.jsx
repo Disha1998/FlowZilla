@@ -8,7 +8,7 @@ import * as fcl from "@onflow/fcl";
 import * as t from "@onflow/types";
 const likes = 54;
 const CategoryItemHome = ({ data }) => {
-// console.log(data);
+  // console.log(data);
   return (
     <div className="grid grid-cols-1 gap-[1.875rem] md:grid-cols-2 lg:grid-cols-4">
       {data && data.map((item) => {
@@ -18,14 +18,14 @@ const CategoryItemHome = ({ data }) => {
             <div className="dark:bg-jacarta-700 dark:border-jacarta-700 border-jacarta-100 rounded-2.5xl block border bg-white p-[1.1875rem] transition-shadow hover:shadow-lg">
               <figure className="relative">
                 <a>
-                <Link href={`/item/${item.id}`}>
-                  <img
-                    style={{cursor:"pointer"}}
-                    src={item.image}
-                    alt="item 5"
-                    className="w-full h-[230px] rounded-[0.625rem] object-cover"
-                  />
-                </Link>
+                  <Link href={`/item/${item.id}`}>
+                    <img
+                      style={{ cursor: "pointer" }}
+                      src={item.image}
+                      alt="item 5"
+                      className="w-full h-[230px] rounded-[0.625rem] object-cover"
+                    />
+                  </Link>
                 </a>
                 <Likes like={likes} />
 
@@ -38,18 +38,15 @@ const CategoryItemHome = ({ data }) => {
                 </a>
               </div>
               <div className="mt-2 text-sm">
-              <span className="dark:text-jacarta-200 text-jacarta-700 mr-1">
+                <span className="dark:text-jacarta-200 text-jacarta-700 mr-1">
                   {item.description}
                 </span>
               </div>
               <div className="mt-2 text-sm">
                 <span className="dark:text-jacarta-200 text-jacarta-700 mr-1">
-                  {item.price} Matic
+                  {item.price} Flow
                 </span>
-                <span className="dark:text-jacarta-300 text-jacarta-500">
-                  {/* 1/1 */}
-                  ~ ${item.maticToUSD}
-                </span>
+
               </div>
 
               <div>
@@ -59,13 +56,16 @@ const CategoryItemHome = ({ data }) => {
               <div className="mt-5 flex items-center justify-between">
 
                 <a className="group flex items-center">
-                  <svg className="icon icon-history group-hover:fill-accent dark:fill-jacarta-200 fill-jacarta-500 mr-1 mb-[3px] h-4 w-4">
-                    <use xlinkHref="/icons.svg#icon-history"></use>
-                  </svg>
-                  <span className="group-hover:text-accent font-display dark:text-jacarta-200 text-sm font-semibold">
-                  Purchase
-                   {/* List NFT for Sale */}
-                  </span>
+
+
+                  <button
+                    type="button"
+                    className="text-accent font-display text-sm font-semibold"
+                    style={{ border: "1px dotted white", padding: "5px", borderRadius:"5px" }}
+
+                  >
+                    Purchase
+                  </button>
                 </a>
               </div>
             </div>
