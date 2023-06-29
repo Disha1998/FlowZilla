@@ -15,7 +15,7 @@ const BidsModal = () => {
   const { bidsModal } = useSelector((state) => state.counter);
   const dispatch = useDispatch();
   const superCoolContext = React.useContext(SupercoolAuthContext);
-  const { allNFTSForSell, updateForPurchase, getUserNFTs, isInitialized, user } = superCoolContext;
+  const { allNFTSForSell, updateForPurchase, getUserNFTs, isInitialized, user, checkInit } = superCoolContext;
   const [buyLoading, setBuyLoading] = useState(false);
 
   // const purchaseNft = async (_tokenId, _price) => {
@@ -54,6 +54,7 @@ await fcl.tx(transactionId).onceSealed();
 };
 
   const purchaseNft = async (_owner, _id) => {
+    setBuyLoading(true);
     // console.log('user and id---', user?.addr, _id);
 
     if (!isInitialized) {
@@ -81,12 +82,16 @@ await fcl.tx(transactionId).onceSealed();
         console.log("Purchase succeeded!");
         await updateForPurchase(_id);
         user && (await getUserNFTs());
-
+        checkInit();
+        setBuyLoading(false);
+        dispatch(bidsModalHide())
       } else {
         console.log("Transaction failed:", transactionStatus.errorMessage);
+        setBuyLoading(false);
       }
     } catch (error) {
       console.log(error);
+      setBuyLoading(false);
     }
   }
 

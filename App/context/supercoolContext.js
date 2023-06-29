@@ -85,7 +85,7 @@ export const SupercoolAuthContextProvider = (props) => {
       fcl.script(getTotalTokenSupply),
       fcl.args([])
     ]).then(fcl.decode);
-    console.log('total supply', result - 1);
+    // console.log('total supply', result - 1);
     let id = result - 1;
     return id;
   }
