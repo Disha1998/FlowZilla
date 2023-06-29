@@ -95,7 +95,7 @@ const Create = () => {
     try {
       const res = await openai.createImage({
         prompt: prompt,
-        n: 1,
+        n: 3,
         size: "256x256",
       });
       setLoading(false);
@@ -153,30 +153,6 @@ const Create = () => {
     }
   };
   // JD CORS Solution END -------------------
-
-  // const generateImage = async () => {
-  //   setPlaceholder(`Search ${prompt}..`);
-  //   setLoading(true);
-
-  //   try {
-  //     const res = await openai.createImage({
-  //       prompt: prompt,
-  //       n: 1,
-  //       size: "256x256",
-  //     });
-  //     setLoading(false);
-  //     setResult(res.data.data[0].url);
-
-
-
-
-  //   } catch (error) {
-  //     setLoading(false);
-  //     console.error(`Error generating image: ${error.response.data.error.message}`);
-  //   }
-  // };
-
-  console.log(result, '----');
 
 
 
@@ -237,8 +213,7 @@ const Create = () => {
     price: price,
     chain: chain,
     owner: user?.addr,
-    image:
-      "https://bafkreihwfi4ptyrrsapnjesjzbyoscqx2ft4zwol7p7ysfhgmjuhdgjuga.ipfs.nftstorage.link/",
+    image: selectedImage,
     category: category,
     forSale: false
   };
