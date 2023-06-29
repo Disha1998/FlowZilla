@@ -5,13 +5,13 @@ import GamingAssetOption from "./gamingAsset/createGamingAsset";
 import CreateCostume from "./costume/createCostume";
 const Options = () => {
 
-  const [category, setCategory] = useState('profile avatar');
+  const [category, setCategory] = useState('avatar');
   const [dropdownItemActive, setDropdownItemActive] = useState(null);
   const [dropdownShow, setDropdownShow] = useState(false);
   const dropdownItemText = [
     {
       id: 1,
-      text: 'profile avatar',
+      text: 'avatar',
     },
     {
       id: 2,
@@ -29,7 +29,7 @@ const Options = () => {
         state={category}
         setState={setCategory}
       />
-      {category == "profile avatar" ? <ProfileAvatarFeatures /> : ""}
+      {category == "avatar" ? <ProfileAvatarFeatures /> : ""}
       {category == "gaming asset" ? <GamingAssetOption /> : ""}
       {category == "costume" ? <CreateCostume /> : ""}
     </>

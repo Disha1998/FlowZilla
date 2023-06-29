@@ -15,6 +15,7 @@ import { mintNFTFLow } from "../../../flow/cadence/transactions/mint_nft";
 import { setupUserTx } from "../../../flow/cadence/transactions/setup_user";
 import * as fcl from "@onflow/fcl";
 import * as t from "@onflow/types"
+import { toast, ToastContainer } from "react-toastify";
 
 const Create = () => {
   const superCoolContext = React.useContext(SupercoolAuthContext);
@@ -32,7 +33,7 @@ const Create = () => {
     checkInit
   } = superCoolContext;
   const [title, setTitle] = useState("default");
-  const [category, setCategory] = useState("Profile avatar" || category);
+  const [category, setCategory] = useState("avatar" || category);
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState();
   const [chain, setChain] = useState("Flow" || chain);
@@ -96,7 +97,7 @@ const Create = () => {
     try {
       const res = await openai.createImage({
         prompt: prompt,
-        n: 3,
+        n: 1,
         size: "256x256",
       });
       setLoading(false);
@@ -148,6 +149,9 @@ const Create = () => {
 
       setImages(arry);
       setGenerateLoading(false);
+      alert("Generated COOL 😎 images succesfully!!")
+      // toast("Generated COOL 😎 images succesfully!!")
+
     } catch (error) {
       console.error(`Error generating image: ${error}`);
       setGenerateLoading(false);
@@ -179,6 +183,9 @@ const Create = () => {
         console.log("Transaction succeeded!");
         await storeNftOnFirebase(_nftData);
         setMintLoading(false);
+        alert("Yayyy..!!🎉🎉 Minted NFT successfully!!🎉 ")
+        // toast("Yayyy..!!🎉🎉 Minted NFT successfully!!🎉 ")
+
         checkInit();
       } else {
         console.log("Transaction failed:", transactionStatus.errorMessage);
@@ -303,6 +310,7 @@ const Create = () => {
                         >
                           Generate
                         </button>
+
                       )}
                     </div>
                     <br />
@@ -376,6 +384,7 @@ const Create = () => {
                   chain={chain}
                   setChain={setChain}
                 />
+                {/* <ToastContainer /> */}
               </div>
             </section>
           </div>

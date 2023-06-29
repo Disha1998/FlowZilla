@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import "tippy.js/dist/tippy.css";
 import Likes from "../likes";
+import { ToastContainer, toast } from 'react-toastify';
+
 import { listForSaleTx } from "../../../flow/cadence/transactions/list_for_sale";
 import { SupercoolAuthContext } from "../../context/supercoolContext";
 import * as fcl from "@onflow/fcl";
@@ -26,11 +28,14 @@ const CategoryItem = ({ data }) => {
       ]).then(fcl.decode);
 
       console.log(transactionId);
-      alert('NFT listed for Sale Succesfully :) ')
       const transactionStatus = await fcl.tx(transactionId).onceSealed();
 
       if (transactionStatus.status === 4) {
         console.log("Transaction succeeded!");
+        alert('NFT listed for Sale Succesfully 💰 ')
+        // toast("NFT listed for Sale Succesfully 💰 ");
+
+
         await updateForSale(_item);
         user && (await getUserNFTs());
 
@@ -94,6 +99,7 @@ const CategoryItem = ({ data }) => {
                   >
                     List NFT for Sale
                   </button>
+                  <ToastContainer />
                 </a>
               </div>
             </div>

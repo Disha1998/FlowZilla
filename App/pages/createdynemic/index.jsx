@@ -20,7 +20,7 @@ export default function CreateDynemic() {
 
   const [title, setTitle] = useState("");
   const [city, setCity] = useState("");
-  const [category, setCategory] = useState("Profile avatar" || category);
+  const [category, setCategory] = useState("Avatar" || category);
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState();
   const [chain, setChain] = useState("Ethereum" || chain);

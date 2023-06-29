@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import CircularProgress from '@mui/material/CircularProgress';
 import ChainDropdown from "../standardDropdown/chainDropdown";
+import { ToastContainer } from "react-toastify";
 
 const RendersellNft = ({ rendersellNFT, setTitle, setDescription, setPrice, createNft, mintLoading, category, setCategory, chain, setChain }) => {
     const blockChainOptionsText = [
@@ -21,7 +22,7 @@ const RendersellNft = ({ rendersellNFT, setTitle, setDescription, setPrice, crea
     const categoryOptionsText = [
         {
             id: 1,
-            text: 'Profile avatar',
+            text: 'avatar',
         },
         {
             id: 2,
@@ -135,6 +136,7 @@ const RendersellNft = ({ rendersellNFT, setTitle, setDescription, setPrice, crea
                                 Create
                             </button>
                     }
+                    {/* <ToastContainer /> */}
                 </div>
             </div>
         );

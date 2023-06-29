@@ -18,7 +18,7 @@ const RenderDynamicsellNft = ({ StoreDyanamicNftsMetadata, rendersellNFT, render
     const categoryOptionsText = [
         {
             id: 1,
-            text: 'Profile avatar',
+            text: 'avatar',
         },
         {
             id: 2,

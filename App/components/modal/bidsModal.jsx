@@ -8,6 +8,7 @@ import { CircularProgress } from "@mui/material";
 import { SUPER_COOL_NFT_CONTRACT, abi } from "../../constant/constant";
 import { purchaseTx } from "../../../flow/cadence/transactions/purchase";
 import { setupUserTx } from "../../../flow/cadence/transactions/setup_user";
+import { ToastContainer, toast } from 'react-toastify';
 
 import * as fcl from "@onflow/fcl";
 import * as t from "@onflow/types";
@@ -40,26 +41,26 @@ const BidsModal = () => {
 
   const setupUser = async () => {
     const transactionId = await fcl
-  .send([
-    fcl.transaction(setupUserTx),
-    fcl.args([]),
-    fcl.payer(fcl.authz),
-    fcl.proposer(fcl.authz),
-    fcl.authorizations([fcl.authz]),
-    fcl.limit(9999),
-  ])
-  .then(fcl.decode);
-console.log(transactionId);
-await fcl.tx(transactionId).onceSealed();
-};
+      .send([
+        fcl.transaction(setupUserTx),
+        fcl.args([]),
+        fcl.payer(fcl.authz),
+        fcl.proposer(fcl.authz),
+        fcl.authorizations([fcl.authz]),
+        fcl.limit(9999),
+      ])
+      .then(fcl.decode);
+    console.log(transactionId);
+    await fcl.tx(transactionId).onceSealed();
+  };
 
   const purchaseNft = async (_owner, _id) => {
     setBuyLoading(true);
     // console.log('user and id---', user?.addr, _id);
 
     if (!isInitialized) {
-      console.log('is initializes val in purchase',isInitialized);
-    await setupUser();
+      console.log('is initializes val in purchase', isInitialized);
+      await setupUser();
     }
     try {
       const transactionId = await fcl.send([
@@ -80,6 +81,8 @@ await fcl.tx(transactionId).onceSealed();
 
       if (transactionStatus.status === 4) {
         console.log("Purchase succeeded!");
+        alert("🛍️  Purchased NFT succesfully!! 🛍️ ")
+        // toast("🛍️  Purchased NFT succesfully!! 🛍️ ")
         await updateForPurchase(_id);
         user && (await getUserNFTs());
         checkInit();
@@ -175,13 +178,14 @@ await fcl.tx(transactionId).onceSealed();
                             <CircularProgress />
                             :
                             <button
-                              onClick={() => purchaseNft(item.owner,item.id)}
+                              onClick={() => purchaseNft(item.owner, item.id)}
                               type="button"
                               className="text-accent shadow-white-volume hover:bg-accent-dark hover:shadow-accent-volume w-36 rounded-full bg-white py-3 px-8 text-center font-semibold transition-all hover:text-white"
                             >
                               Purchase
                             </button>
                         }
+                        {/* <ToastContainer /> */}
                       </div>
                     </div>
                   </div>

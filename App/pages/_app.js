@@ -10,7 +10,7 @@ import Meta from "../components/Meta";
 import UserContext from "../components/UserContext";
 import { useEffect, useRef } from "react";
 import { SupercoolAuthContextProvider } from "../context/supercoolContext";
-
+import 'react-toastify/dist/ReactToastify.css';
 // const dotenv = require("dotenv")
 
 // dotenv.config()

@@ -6,7 +6,7 @@ const tranding_category_filter = [
   {
     id: 1,
     svg: "art",
-    text: "profile avatar",
+    text: "avatar",
   },
 
   {
