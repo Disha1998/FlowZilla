@@ -26,6 +26,7 @@ const CategoryItem = ({ data }) => {
       ]).then(fcl.decode);
 
       console.log(transactionId);
+      alert('NFT listed for Sale Succesfully :) ')
       const transactionStatus = await fcl.tx(transactionId).onceSealed();
 
       if (transactionStatus.status === 4) {

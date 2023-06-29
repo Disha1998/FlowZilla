@@ -96,7 +96,7 @@ const Create = () => {
     try {
       const res = await openai.createImage({
         prompt: prompt,
-        n: 1,
+        n: 3,
         size: "256x256",
       });
       setLoading(false);
@@ -212,8 +212,7 @@ const Create = () => {
     price: price,
     chain: chain,
     owner: user?.addr,
-    image:
-      "https://bafkreihwfi4ptyrrsapnjesjzbyoscqx2ft4zwol7p7ysfhgmjuhdgjuga.ipfs.nftstorage.link/",
+    image: selectedImage,
     category: category,
     forSale: false
   };
