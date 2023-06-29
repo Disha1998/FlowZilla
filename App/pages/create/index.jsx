@@ -61,6 +61,7 @@ const Create = () => {
     }
   }, [imageUrl, isMounted]);
 
+  // console.log('opena ai api key', process.env.apiKey);
   const configuration = new Configuration({
     apiKey: process.env.apiKey,
   });
@@ -72,7 +73,7 @@ const Create = () => {
   const client = new NFTStorage({ token: NFT_STORAGE_TOKEN });
 
   const setupUser = async () => {
-        const transactionId = await fcl
+    const transactionId = await fcl
       .send([
         fcl.transaction(setupUserTx),
         fcl.args([]),
@@ -86,60 +87,87 @@ const Create = () => {
     await fcl.tx(transactionId).onceSealed();
   };
 
+
+  // const generateImage = async () => {
+  //   setPlaceholder(`Search ${prompt}..`);
+  //   setGenerateLoading(true);
+  //   setPlaceholder(`Search ${prompt}...`);
+
+
+  //   try {
+  //     const res = await openai.createImage({
+  //       prompt: prompt,
+  //       n: 1,
+  //       size: "256x256",
+  //     });
+  //     console.log(res.data.data[0].url);
+
+  //     // setResult(res.data.data[0].url);
+  //   } catch (error) {
+  //     setLoading(false);
+  //     console.error(`Error generating image: ${error.response.data.error.message}`);
+  //   }
+  // };
+
   const generateImage = async () => {
+    setPlaceholder(`Search ${prompt}..`);
     setGenerateLoading(true);
     setPlaceholder(`Search ${prompt}...`);
+
+
     try {
       const res = await openai.createImage({
         prompt: prompt,
-        n: 3,
-        size: "256X256",
+        n: 1,
+        size: "256x256",
       });
-      console.log(res);
+      // console.log(res.data.data[0].url);
 
-      let arry = [];
-      for (let i = 0; i < res.data.data.length; i++) {
-        const img_url = res.data.data[i].url;
-        console.log("img_url", img_url);
-        const api = await axios.create({
-          baseURL: "https://open-ai-enwn.onrender.com",
-        });
-        const obj = {
-          url: img_url,
-        };
-        let response = await api
-          .post("/image", obj)
-          .then((res) => {
-            return res;
-          })
-          .catch((error) => {
-            console.log(error);
-          });
-        const arr = new Uint8Array(response.data.data);
-        const blob = new Blob([arr], { type: "image/jpeg" });
-        const imageFile = new File([blob], `data.png`, {
-          type: "image/jpeg",
-        });
-        const metadata = await client.store({
-          name: "data",
-          description: "data",
-          image: imageFile,
-        });
-        const imUrl = `https://nftstorage.link/ipfs/${metadata.ipnft}/metadata.json`;
-        console.log(imUrl, "imUrl");
-        const data = (await axios.get(imUrl)).data;
-        console.log(data.image, "data");
-        const rep = data.image.replace(
-          "ipfs://",
-          "https://nftstorage.link/ipfs/"
-        );
-        console.log(rep, "==rep");
+  let arry = [];
+  for (let i = 0; i < res.data.data.length; i++) {
+    const img_url = res.data.data[i].url;
+    console.log("img_url", img_url);
+    const api = await axios.create({
+      baseURL: "https://open-ai-enwn.onrender.com",
+    });
+    const obj = {
+      url: img_url,
+    };
+    let response = await api
+      .post("/image", obj)
+      .then((res) => {
+        return res;
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+      // console.log(response);
+    const arr = new Uint8Array(response.data.data);
+    const blob = new Blob([arr], { type: "image/jpeg" });
+    const imageFile = new File([blob], `data.png`, {
+      type: "image/jpeg",
+    });
+    console.log(imageFile,'img fileeee');
+    const metadata = await client.store({
+      name: "data",
+      description: "data",
+      image: imageFile,
+    });
+    const imUrl = `https://nftstorage.link/ipfs/${metadata.ipnft}/metadata.json`;
+    console.log(imUrl, "imUrl");
+    const data = (await axios.get(imUrl)).data;
+    console.log(data.image, "data");
+    const rep = data.image.replace(
+      "ipfs://",
+      "https://nftstorage.link/ipfs/"
+    );
+    console.log(rep, "==rep");
 
-        arry.push(rep);
-      }
-      console.log(arry, "----arry");
-     
-      setImages(arry);
+    arry.push(rep);
+  }
+  console.log(arry, "----arry");
+
+  setImages(arry);
       setGenerateLoading(false);
     } catch (error) {
       console.error(`Error generating image: ${error}`);
@@ -148,7 +176,7 @@ const Create = () => {
   };
   // JD CORS Solution END -------------------
 
-  const mintNft = async (_price, _metadataurl , _nftData) => {
+  const mintNft = async (_price, _metadataurl, _nftData) => {
     const ipfsHash = _metadataurl;
     const name = title;
     try {
@@ -163,7 +191,7 @@ const Create = () => {
           fcl.proposer(fcl.authz),
           fcl.authorizations([fcl.authz]),
           fcl.limit(9999),
-        ])  
+        ])
         .then(fcl.decode);
       console.log(transactionId, "<=transactionId");
       const transactionStatus = await fcl.tx(transactionId).onceSealed();
@@ -178,7 +206,7 @@ const Create = () => {
       }
     } catch (error) {
       console.log("Error: ", error);
-    setMintLoading(false);
+      setMintLoading(false);
     }
 
     user && (await getUserNFTs());
@@ -208,18 +236,18 @@ const Create = () => {
     image:
       "https://bafkreihwfi4ptyrrsapnjesjzbyoscqx2ft4zwol7p7ysfhgmjuhdgjuga.ipfs.nftstorage.link/",
     category: category,
-    forSale : false
+    forSale: false
   };
   const createNft = async () => {
     // console.log(nftData);
     setMintLoading(true);
     let metadataurl = await uploadOnIpfs(nftData);
     if (!isInitialized) {
-      console.log('is initializes val in create',isInitialized);
-    await setupUser();
+      console.log('is initializes val in create', isInitialized);
+      await setupUser();
     }
     console.log('metadataurl', metadataurl);
-    mintNft(ethers.utils.parseUnits(price?.toString(), "ether"), metadataurl ,nftData);
+    mintNft(ethers.utils.parseUnits(price?.toString(), "ether"), metadataurl, nftData);
 
   };
 
