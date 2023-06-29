@@ -21,13 +21,11 @@ const Create = () => {
   const {
     isInitialized,
     uploadOnIpfs,
-    handleImgUpload,
     loading,
     setLoading,
     GenerateNum,
     prompt,
     setPrompt,
-    genRanImgLoding,
     getUserNFTs,
     user,
     storeNftOnFirebase,
@@ -90,28 +88,8 @@ const Create = () => {
   };
 
 
-  // const generateImage = async () => {
-  //   setPlaceholder(`Search ${prompt}..`);
-  //   setGenerateLoading(true);
-  //   setPlaceholder(`Search ${prompt}...`);
-
-
-  //   try {
-  //     const res = await openai.createImage({
-  //       prompt: prompt,
-  //       n: 1,
-  //       size: "256x256",
-  //     });
-  //     console.log(res.data.data[0].url);
-
-  //     // setResult(res.data.data[0].url);
-  //   } catch (error) {
-  //     setLoading(false);
-  //     console.error(`Error generating image: ${error.response.data.error.message}`);
-  //   }
-  // };
-
   const generateImage = async () => {
+    setGenerateLoading(true);
     setPlaceholder(`Search ${prompt}..`);
     setLoading(true);
 
@@ -293,19 +271,16 @@ const Create = () => {
                     <p className="dark:text-jacarta-300 text-4xs mb-3">
                       We're excited to bring your NFT to life, but we need your
                       input. Please provide us with a brief description of what
-                      you want it to look like.
-                      {/* <span>
+                      you want it to look like or
+                      <span>
                         <a
                           className="hover:text-accent dark:hover:text-white text-jacarta-700 font-bold font-display mb-6 text-center text-md dark:text-white md:text-left lg:text-md xl:text-md animate-gradient"
                           style={{ cursor: "pointer" }}
                           onClick={GenerateNum}
                         >
-                          {" "}
-                          {genRanImgLoding
-                            ? "generating random prompt..."
-                            : "generate random image."}{" "}
+                          {" "} generate random image.{" "}
                         </a>
-                      </span> */}
+                      </span>
                     </p>
 
                     <textarea

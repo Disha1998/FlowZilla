@@ -10,6 +10,7 @@ import * as types from "@onflow/types";
 import * as t from "@onflow/types";
 import { getSaleNFTsScript } from "../../flow/cadence/scripts/get_sale_nfts";
 import { initializeApp } from "firebase/app";
+import { RandomPrompts } from "../components/RandomImgs";
 import { getAnalytics } from "firebase/analytics";
 import { getTotalTokenSupply } from "../../flow/cadence/scripts/get_totalSupply";
 import { checkIsInitialized } from "../../flow/cadence/scripts/checkIsInitialized_collection";
@@ -163,20 +164,10 @@ export const SupercoolAuthContextProvider = (props) => {
     console.log('done');
   }
 
-  // updateValues()
-
-
-
-
-
-
-
-
-
-
-
-
-
+  const GenerateNum = () => {
+    const index = Math.floor(Math.random() * RandomPrompts.length);
+    setPrompt(RandomPrompts[index])
+  };
 
 
 
@@ -362,7 +353,8 @@ export const SupercoolAuthContextProvider = (props) => {
         allNFTSForSell,
         UserProfileRef,
         db,
-        updateForPurchase
+        updateForPurchase,
+        GenerateNum
       }}
       {...props}
     >
