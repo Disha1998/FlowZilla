@@ -15,8 +15,6 @@ const WeaponFeatures = () => {
     let detailPrompt = `Rewrite the prompt and add some more lines from you, giving it greater emphasis with more details, to create an image of Weapon based on this information:- create a dangerous ${weaponType} and make sure it's design style will be ${designStyle} and Remember to infuse the weapon image with vitality and energy`
 
     const generateText = async () => {
-        console.log(detailPrompt);
-
         try {
             const response = await axios.post(
                 'https://api.openai.com/v1/engines/text-davinci-003/completions',
@@ -31,9 +29,7 @@ const WeaponFeatures = () => {
                     },
                 }
             );
-            console.log(response.data.choices[0].text);
             setPrompt(response.data.choices[0].text);
-            //   setText(response.data.choices[0].text);
         } catch (error) {
             console.error('Error:', error);
         }
@@ -109,12 +105,8 @@ const WeaponFeatures = () => {
                 setState={setDesignStyle}
             />
 
-            <div style={{
-                // textAlign: "center" 
-                // , width: "100%" 
-            }}>
+            <div>
                 <Button color="secondary" className="animate-gradient mb-5" onClick={generateText} variant="outlined" style={{
-                    //  width: "100%", 
                     fontSize: "20px"
                 }} >Submit</Button>
             </div>

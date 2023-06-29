@@ -15,7 +15,6 @@ const JumpsuitCostume = () => {
 
     let detailPrompt = `Rewrite the prompt and add some more lines from you, giving it greater emphasis with more details, to create costume Jumpsuit based on this information:- make sure image style will be ${designStyle}, jumpsuit type:${jumpsuitType}, jumpsuit color:${jumpsuitColor} and there should be ${closure} closure to the jumpsuit and Remember to infuse the avatar with vitality and energy`
     const generateText = async () => {
-        console.log(detailPrompt);
 
         try {
             const response = await axios.post(
@@ -31,9 +30,7 @@ const JumpsuitCostume = () => {
                     },
                 }
             );
-            console.log(response.data.choices[0].text);
             setPrompt(response.data.choices[0].text);
-            //   setText(response.data.choices[0].text);
         } catch (error) {
             console.error('Error:', error);
         }

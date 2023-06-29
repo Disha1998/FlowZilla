@@ -11,14 +11,11 @@ const Single_post = () => {
 	const router = useRouter();
 	const pid = router.query.single_post;
 
-	console.log(pid);
-
 	return (
 		<div>
 			<Meta title={`${pid} || Xhibiter | NFT Marketplace Next.js Template`} />
 
 			<div className="pt-[5.5rem] lg:pt-24">
-				{/* <!-- Post --> */}
 				<section className="relative py-16 md:py-24">
 					<picture className="pointer-events-none absolute inset-0 -z-10 dark:hidden">
 						<img src="/images/gradient_light.jpg" alt="gradient" className="h-full w-full" />
@@ -28,7 +25,6 @@ const Single_post = () => {
 						.map((item) => {
 							const { id, image, title, text, date, time, subImages, authorImage, authorName } =
 								item;
-							// console.log(image);
 							return (
 								<div className="container" key={id}>
 									<header className="mx-auto mb-16 max-w-lg text-center">
@@ -42,7 +38,6 @@ const Single_post = () => {
 										<h1 className="font-display text-jacarta-700 mb-4 text-2xl dark:text-white sm:text-5xl">
 											{title}
 										</h1>
-										{/* <!-- Author --> */}
 										<div className="inline-flex items-center">
 											<img
 												src={authorImage}
@@ -55,7 +50,6 @@ const Single_post = () => {
 													{authorName}
 												</span>
 
-												{/* <!-- Date / Time --> */}
 												<div className="text-jacarta-400 flex flex-wrap items-center space-x-2 text-sm">
 													<span>
 														<time>{date}</time>
@@ -67,14 +61,11 @@ const Single_post = () => {
 										</div>
 									</header>
 
-									{/* <!-- Featured image --> */}
 									<figure className="mb-16">
 										<img src={image} alt="post 1" className="rounded-2xl w-full" />
 									</figure>
 
-									{/* <!-- Article --> */}
 									<article className="mb-12">
-										{/* <!-- Content --> */}
 										<div className="article-content">
 											<p className="text-lg leading-normal">
 												Since we launched Tezos at the end of 2021, many awesome creator. From a
@@ -136,7 +127,6 @@ const Single_post = () => {
 									</article>
 
 									<div className="mx-auto max-w-[48.125rem]">
-										{/* <!-- Share --> */}
 										<div className="mb-16 flex items-center">
 											<span className="dark:text-jacarta-300 mr-4 text-sm font-bold">Share:</span>
 											<div className="flex space-x-2">
@@ -211,7 +201,6 @@ const Single_post = () => {
 											</div>
 										</div>
 
-										{/* <!-- Author --> */}
 										<div className="dark:bg-jacarta-700 dark:border-jacarta-600 border-jacarta-100 rounded-2xl mb-16 flex border bg-white p-8">
 											<img
 												src={authorImage}
@@ -270,25 +259,18 @@ const Single_post = () => {
 											</div>
 										</div>
 
-										{/* <!-- Related --> */}
 										<h2 className="font-display text-jacarta-700 mb-8 text-3xl dark:text-white">
 											Related Posts
 										</h2>
-
-										{/* <div className="grid grid-cols-1 gap-[1.875rem] sm:grid-cols-2">
-						</div> */}
-										{/* <!-- Posts --> */}
 										<News_item
 											data={news_data.slice(4)}
 											classes="grid grid-cols-1 gap-[1.875rem] sm:grid-cols-2"
 										/>
 									</div>
-									{/* <!-- end related --> */}
 								</div>
 							);
 						})}
 				</section>
-				{/* <!-- end post --> */}
 			</div>
 		</div>
 	);

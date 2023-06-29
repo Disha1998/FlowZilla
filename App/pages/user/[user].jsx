@@ -42,7 +42,6 @@ const User = () => {
 			console.log("First create profile!!");
 		} else {
       const data = querySnapshot.docs.map((doc) => doc.data());
-      console.log(data);
       setUsername(data[0].username)
       setBio(data[0].bio)
       setCoverePhoto(data[0].coverimage);

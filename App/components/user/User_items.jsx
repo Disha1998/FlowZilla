@@ -24,7 +24,6 @@ const User_items = () => {
 
   // const getUserNFTs = async () => {
   //   let account = user?.addr
-  //   // console.log('address',account);
   //   const result = await fcl.send([
   //     fcl.script(getNFTsScript),
   //     fcl.args([
@@ -32,7 +31,6 @@ const User_items = () => {
   //     ])
   //   ]).then(fcl.decode);
 
-  //   console.log('result==>', result);
   //   let metadataa = []
   //   for (let i = 0; i < result.length; i++) {
   //     const tokenURI = result[i].ipfsHash;
@@ -46,7 +44,6 @@ const User_items = () => {
   //   setNFTs(metadataa);
   // }
 
-  // console.log('nfts==>', nfts);
 
 
   const tabItem = [

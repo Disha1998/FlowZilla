@@ -17,11 +17,7 @@ const GamingCharacterFeatures = () => {
 
     let detailPrompt = `Rewrite the prompt and add some more lines from you, giving it greater emphasis with more details, to create a Gaming Character based on this prompt:- so create a gaming character who will be ${characterType}, with clothing style:${clothingStyle}, with ${accessories} accessory, with ${footwear} footwear, with ${hairstyle} hair style lastly make sure to generate image with ${imageStyle} and Remember to infuse the avatar with vitality and energy`;
 
-    // console.log(detailPrompt);
-
     const generateText = async () => {
-        console.log(detailPrompt);
-
         try {
             const response = await axios.post(
                 'https://api.openai.com/v1/engines/text-davinci-003/completions',
@@ -36,9 +32,7 @@ const GamingCharacterFeatures = () => {
                     },
                 }
             );
-            console.log(response.data.choices[0].text);
             setPrompt(response.data.choices[0].text);
-            //   setText(response.data.choices[0].text);
         } catch (error) {
             console.error('Error:', error);
         }
@@ -275,17 +269,11 @@ const GamingCharacterFeatures = () => {
                     setState={setImageStyle}
                 />
 
-                <div style={{
-                    // textAlign: "center" 
-                    // , width: "100%" 
-                }}>
+                <div>
                     <Button color="secondary" className="animate-gradient mb-5" onClick={generateText} variant="outlined" style={{
-                        //  width: "100%", 
                         fontSize: "20px"
                     }} >Submit</Button>
                 </div>
-
-                {/* <Button onClick={generateText}>Submit</Button> */}
 
             </div>
 

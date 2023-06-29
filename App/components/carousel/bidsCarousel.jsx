@@ -17,8 +17,6 @@ const BidsCarousel = () => {
   const superCoolContext = React.useContext(SupercoolAuthContext);
   const { user, allNFTSForSell } = superCoolContext;
   const [nfts, setNFTs] = useState([]);
-  // console.log(nfts, 'nftssss');
-
   return (
     <>
       <Swiper
@@ -101,6 +99,8 @@ const BidsCarousel = () => {
                   </div>
 
                   <div className="mt-8 flex items-center justify-between">
+                  <Link href={`/item/${item.id}`}>
+                   
                     <button
                       type="button"
                       className="text-accent font-display text-sm font-semibold"
@@ -108,7 +108,7 @@ const BidsCarousel = () => {
                     >
                       Purchase
                     </button>
-
+                  </Link>
                     <Likes
                       like="98"
                       classes="flex items-center space-x-1"

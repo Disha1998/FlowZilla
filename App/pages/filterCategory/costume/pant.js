@@ -16,8 +16,6 @@ const PantCostume = () => {
     let detailPrompt = `Rewrite the prompt and add some more lines from you, giving it greater emphasis with more details, to create costume Pant based on this information:- make sure image style will be ${designStyle}, pant type:${pantType}, pant length shuold be:${pantLength}, pant's pockets should be ${pocketStyle} and Remember to infuse the avatar with vitality and energy`
 
     const generateText = async () => {
-        console.log(detailPrompt);
-
         try {
             const response = await axios.post(
                 'https://api.openai.com/v1/engines/text-davinci-003/completions',
@@ -32,9 +30,7 @@ const PantCostume = () => {
                     },
                 }
             );
-            console.log(response.data.choices[0].text);
             setPrompt(response.data.choices[0].text);
-            //   setText(response.data.choices[0].text);
         } catch (error) {
             console.error('Error:', error);
         }

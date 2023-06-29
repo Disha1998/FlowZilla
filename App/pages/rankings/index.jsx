@@ -189,7 +189,6 @@ const Index = () => {
 									icon,
 								} = item;
 								const itemLink = image.split('/').slice(-1).toString().replace('.jpg', '');
-								// console.log(item.category.art);
 
 								return (
 									<Link href={/user/ + itemLink} key={id}>
@@ -200,14 +199,12 @@ const Index = () => {
 											>
 												<span className="mr-2 lg:mr-4">{id}</span>
 												<figure className="relative mr-2 w-8 shrink-0 self-start lg:mr-5 lg:w-12">
-													{/* <img src={image} alt={title} className="rounded-2lg" loading="lazy" /> */}
 													<Image
 														src={image}
 														alt={title}
 														height={32}
 														width={32}
 														layout="responsive"
-														// objectFit="contain"
 														className="rounded-2lg"
 													/>
 
@@ -287,7 +284,6 @@ const Index = () => {
 					</div>
 				</div>
 			</section>
-			{/* <!-- end rankings --> */}
 		</>
 	);
 };

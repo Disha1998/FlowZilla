@@ -17,8 +17,6 @@ const ShirtCostume = () => {
 
     let detailPrompt = `Rewrite the prompt and add some more lines from you, giving it greater emphasis with more details, to create costume Shirt based on this information:- make sure image style will be ${designStyle}, shirt type:${shirtType}, shirt color:${shirtColor},shirt's sleeves should be:${sleeveLength} and there should be ${shirtPattern} pattern on shirt and Remember to infuse the avatar with vitality and energy`
     const generateText = async () => {
-        console.log(detailPrompt);
-
         try {
             const response = await axios.post(
                 'https://api.openai.com/v1/engines/text-davinci-003/completions',
@@ -33,9 +31,7 @@ const ShirtCostume = () => {
                     },
                 }
             );
-            console.log(response.data.choices[0].text);
             setPrompt(response.data.choices[0].text);
-            //   setText(response.data.choices[0].text);
         } catch (error) {
             console.error('Error:', error);
         }

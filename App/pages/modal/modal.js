@@ -2,7 +2,6 @@ import { useState } from "react"
 
 const ImageModal = ({ setModalOpen, selectedImage, setSelectedImage, setrendersellNFT }) => {
     const [error, setError] = useState(null);
-    console.log(selectedImage);
     const closeModal = () => {
         setModalOpen(false);
         setSelectedImage(null)
