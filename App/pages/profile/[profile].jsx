@@ -61,6 +61,7 @@ const Edit_user = () => {
 				const dataref = doc(db, "UserProfile", fire.id);
 				updateDoc(dataref, data);
 				console.log("Profile updated!!");
+				alert("Profile is updated :) ")
 
 			})
 		}

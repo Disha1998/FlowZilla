@@ -59,12 +59,12 @@ const BidsModal = () => {
 
       if (transactionStatus.status === 4) {
         console.log("Purchase succeeded!");
-        alert("🛍️  Purchased NFT succesfully!! 🛍️ ")
-        // toast("🛍️  Purchased NFT succesfully!! 🛍️ ")
         await updateForPurchase(_id);
         user && (await getUserNFTs());
         checkInit();
         setBuyLoading(false);
+        alert("🛍️  Purchased NFT succesfully!! 🛍️ ")
+
         dispatch(bidsModalHide())
       } else {
         console.log("Transaction failed:", transactionStatus.errorMessage);
