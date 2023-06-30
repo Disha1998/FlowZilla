@@ -96,7 +96,7 @@ const Create = () => {
       const res = await openai.createImage({
         prompt: prompt,
         n: 1,
-        size: "256x256",
+        size: "512x512",
       });
       setLoading(false);
       setResult(res.data.data[0].url);
@@ -138,8 +138,6 @@ const Create = () => {
       }
       setImages(arry);
       setGenerateLoading(false);
-      alert("Generated COOL 😎 images succesfully!!")
-      // toast("Generated COOL 😎 images succesfully!!")
 
     } catch (error) {
       console.error(`Error generating image: ${error}`);

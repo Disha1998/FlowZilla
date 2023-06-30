@@ -1,4 +1,5 @@
 import Link from "next/link";
+import StableImg from "../../pages/stableDiff";
 
 const hero = () => {
   return (
@@ -25,6 +26,7 @@ const hero = () => {
               Buy, sell and collect AI Generated NFTs.
               {/* Super cool */}
             </h1>
+            <StableImg/>
             <p className="dark:text-jacarta-200 mb-8 text-center text-lg md:text-left">
               The world largest digital marketplace for generative AI based Avatars, gaming assets, metaverse costume etc.
             </p>

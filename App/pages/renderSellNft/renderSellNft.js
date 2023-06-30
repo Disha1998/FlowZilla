@@ -22,15 +22,19 @@ const RendersellNft = ({ rendersellNFT, setTitle, setDescription, setPrice, crea
     const categoryOptionsText = [
         {
             id: 1,
-            text: 'avatar',
+            text: 'Avatar',
         },
         {
             id: 2,
-            text: 'gaming asset',
+            text: 'Gaming asset',
         },
         {
             id: 3,
-            text: 'costume',
+            text: 'Anime',
+        },
+        {
+            id: 4,
+            text: 'Costume',
         },
 
     ];
