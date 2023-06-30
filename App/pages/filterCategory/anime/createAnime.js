@@ -11,11 +11,10 @@ const AnimeFeatures = () => {
     const [facialExpression, setFacialExpression] = useState('Expression' || facialExpression);
     const [eyeColor, setEyeColor] = useState('eyes' || eyeColor);
     const [skinTone, setSkinTone] = useState('skin tone' || skinTone);
-    const [accessories, setAccessories] = useState('accessories' || accessories);
     const [background, setBackground] = useState('background' || background);
 
 
-    let detailPrompt = `Rewrite the prompt and add some more lines from you, giving it greater emphasis with more details, to create a Anime character based on this information:- make sure Anime charcter's look like Anime, gender:${gender},facial Expression:${facialExpression},eye color:${eyeColor},skin tone:${skinTone},accessories:${accessories}, and the background of this image should be ${background} and Remember to infuse the character with vitality and energy`
+    let detailPrompt = `Rewrite the prompt and add some more lines from you, giving it greater emphasis with more details, to create a Anime character based on this information:- make sure Anime charcter's look like Anime, gender:${gender},facial Expression:${facialExpression},eye color:${eyeColor},skin tone:${skinTone}, and the background of this image should be ${background} and Remember to infuse the character with vitality and energy`
     const generateText = async () => {
         try {
             const response = await axios.post(
@@ -114,31 +113,6 @@ const AnimeFeatures = () => {
             text: 'Dark',
         },
     ];
-
-    const accessoriesOptionsText = [
-        {
-            id: 1,
-            text: 'Glasses',
-        },
-        {
-            id: 2,
-            text: 'Hat',
-        },
-        {
-            id: 3,
-            text: 'Headphone',
-        },
-        {
-            id: 4,
-            text: 'Necklaces',
-        },
-        {
-            id: 5,
-            text: 'Earrings',
-        },
-    ];
-    
-
     const backgroundOptionsText = [
         {
             id: 1,
@@ -208,13 +182,6 @@ const AnimeFeatures = () => {
                 dropdownItemText={skinToneOptionsText}
                 state={skinTone}
                 setState={setSkinTone}
-            />
-
-
-            <StandardDropdown
-                dropdownItemText={accessoriesOptionsText}
-                state={accessories}
-                setState={setAccessories}
             />
 
             <div>
