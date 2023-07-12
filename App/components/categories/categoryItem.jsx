@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import Link from "next/link";
 import "tippy.js/dist/tippy.css";
 import Likes from "../likes";
 import { ToastContainer, toast } from 'react-toastify';
@@ -11,10 +12,8 @@ const likes = 54;
 const CategoryItem = ({ data }) => {
   const superCoolContext = React.useContext(SupercoolAuthContext);
   const { storeSellNftOnFirebase, updateForSale, user, getUserNFTs } = superCoolContext;
-  const [saleLoading, setSaleLoading] = useState(false);
 
   const listForSale = async (_id, _price, _item) => {
-    setSaleLoading(true);
     try {
       const transactionId = await fcl.send([
         fcl.transaction(listForSaleTx),
@@ -39,17 +38,13 @@ const CategoryItem = ({ data }) => {
 
         await updateForSale(_item);
         user && (await getUserNFTs());
-      setSaleLoading(false);
 
       } else {
         console.log("Transaction failed:", transactionStatus.errorMessage);
-      setSaleLoading(false);
       }
 
     } catch (error) {
       console.log(error);
-      setSaleLoading(false);
-
     }
   }
 
@@ -65,12 +60,14 @@ const CategoryItem = ({ data }) => {
             <div className="dark:bg-jacarta-700 dark:border-jacarta-700 border-jacarta-100 rounded-2.5xl block border bg-white p-[1.1875rem] transition-shadow hover:shadow-lg">
               <figure className="relative">
                 <a>
+                  <Link href={`/item/${item.tokenId}`}>
                     <img
                       style={{ cursor: "pointer" }}
                       src={item.image}
                       alt="item 5"
                       className="w-full h-[230px] rounded-[0.625rem] object-cover"
                     />
+                  </Link>
                 </a>
                 <Likes like={likes} />
 
@@ -102,7 +99,7 @@ const CategoryItem = ({ data }) => {
                   >
                     List NFT for Sale
                   </button>
-                  <ToastContainer />
+                  {/* <ToastContainer /> */}
                 </a>
               </div>
             </div>
