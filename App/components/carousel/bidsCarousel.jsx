@@ -57,11 +57,12 @@ const BidsCarousel = () => {
                           <img
                             src={item.image}
                             alt={item.title}
-                            height={230}
-                            width={230}
+                            // height={230}
+                            // width={230}
                             layout="responsive"
                             // objectFit="cover"
-                            className="rounded-[0.625rem] w-full"
+                            // className="rounded-[0.625rem] w-full"
+                            className="w-full h-[230px] rounded-[0.625rem] object-cover"
                             loading="lazy"
                           />
                         </Link>
@@ -99,16 +100,16 @@ const BidsCarousel = () => {
                   </div>
 
                   <div className="mt-8 flex items-center justify-between">
-                  <Link href={`/item/${item.id}`}>
-                   
-                    <button
-                      type="button"
-                      className="text-accent font-display text-sm font-semibold"
-                      style={{ border: "1px dotted white", padding: "5px", borderRadius: "5px" }}
-                    >
-                      Purchase
-                    </button>
-                  </Link>
+                    <Link href={`/item/${item.id}`}>
+
+                      <button
+                        type="button"
+                        className="text-accent font-display text-sm font-semibold"
+                        style={{ border: "1px dotted white", padding: "5px", borderRadius: "5px" }}
+                      >
+                        Purchase
+                      </button>
+                    </Link>
                     <Likes
                       like="98"
                       classes="flex items-center space-x-1"
